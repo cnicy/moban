@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>cn.mobilemix.allin</groupId>
+        <artifactId>opensesame</artifactId>
+        <version>1.0</version>
+    </parent>
+
+    <groupId>com.gehua.moban</groupId>
+    <artifactId>moban</artifactId>
+    <packaging>pom</packaging>
+    <version>1.0-SNAPSHOT</version>
+
+    <modules>
+        <module>moban-commons</module>
+        <module>moban-model</module>
+        <module>moban-dao</module>
+        <module>moban-service</module>
+        <module>moban-war-admin</module>
+    </modules>
+
+    <properties>
+        <!-- utils -->
+        <slf4j.version>1.7.7</slf4j.version>
+        <logback.version>1.1.3</logback.version>
+        <jackson.version>2.2.2</jackson.version>
+        <!--db-->
+        <druid.version>1.0.9</druid.version>
+        <mybatis.version>3.3.0</mybatis.version>
+        <mybatis-spring.version>1.2.3</mybatis-spring.version>
+        <mybatis-pager.version>4.0.2</mybatis-pager.version>
+        <mybatis-mapper.version>3.3.0</mybatis-mapper.version>
+        <mysql-java-connector.version>5.1.37</mysql-java-connector.version>
+        <!--spring-->
+        <spring-framework.version>3.2.15.RELEASE</spring-framework.version>
+        <servlet.version>3.0.1</servlet.version>
+        <jstl.version>1.2</jstl.version>
+        <!-- auth -->
+        <shiro.version>1.2.3</shiro.version>
+    </properties>
+
+    <build>
+        <resources>
+            <resource>
+                <!-- 扫描替换 -->
+                <directory>${basedir}/src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
+    </build>
+
+    <profiles>
+        <profile>
+            <id>env-dev</id>
+            <activation>
+                <property>
+                    <name>environment.type</name>
+                    <value>env-dev</value>
+                </property>
+            </activation>
+            <properties>
+                <!-- 数据源 -->
+                <datasource.url>
+                    <![CDATA[jdbc:mysql://123.57.221.202:3306/zhihu?Unicode=true&amp;characterEncoding=UTF-8]]>
+                </datasource.url>
+                <datasource.username>root</datasource.username>
+                <datasource.maxActive>2000</datasource.maxActive>
+                <datasource.maxWait>6000</datasource.maxWait>
+            </properties>
+        </profile>
+        <profile>
+            <id>env-test</id>
+            <activation>
+                <property>
+                    <name>environment.type</name>
+                    <value>env-test</value>
+                </property>
+            </activation>
+            <properties>
+                <!-- 数据源 -->
+                <datasource.url>
+                    <![CDATA[jdbc:mysql://123.57.221.202:3306/test?Unicode=true&amp;characterEncoding=UTF-8]]>
+                </datasource.url>
+                <datasource.username>root</datasource.username>
+                <datasource.maxActive>2000</datasource.maxActive>
+                <datasource.maxWait>6000</datasource.maxWait>
+            </properties>
+        </profile>
+    </profiles>
+
+    <dependencyManagement>
+        <dependencies>
+            <!--*********************** UTILS ***************************-->
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-api</artifactId>
+                <version>${slf4j.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>ch.qos.logback</groupId>
+                <artifactId>logback-access</artifactId>
+                <version>${logback.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>ch.qos.logback</groupId>
+                <artifactId>logback-classic</artifactId>
+                <version>${logback.version}</version>
+            </dependency>
+            <!--jackson-->
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-databind</artifactId>
+                <version>${jackson.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-annotations</artifactId>
+                <version>${jackson.version}</version>
+            </dependency>
+            <!--*********************** DB ***************************-->
+            <dependency>
+                <groupId>mysql</groupId>
+                <artifactId>mysql-connector-java</artifactId>
+                <version>${mysql-java-connector.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.mybatis</groupId>
+                <artifactId>mybatis-spring</artifactId>
+                <version>${mybatis-spring.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-orm</artifactId>
+                <version>${spring-framework.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.mybatis</groupId>
+                <artifactId>mybatis</artifactId>
+                <version>${mybatis.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>tk.mybatis</groupId>
+                <artifactId>mapper</artifactId>
+                <version>${mybatis-mapper.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.pagehelper</groupId>
+                <artifactId>pagehelper</artifactId>
+                <version>${mybatis-pager.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>druid</artifactId>
+                <version>${druid.version}</version>
+            </dependency>
+            <!--*********************** SPRING ***************************-->
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-context</artifactId>
+                <version>${spring-framework.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-webmvc</artifactId>
+                <version>${spring-framework.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-aspects</artifactId>
+                <version>${spring-framework.version}</version>
+            </dependency>
+            <!--*********************** WEB ***************************-->
+            <dependency>
+                <groupId>javax.servlet</groupId>
+                <artifactId>javax.servlet-api</artifactId>
+                <version>${servlet.version}</version>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>javax.servlet</groupId>
+                <artifactId>jstl</artifactId>
+                <version>${jstl.version}</version>
+            </dependency>
+            <!--*********************** AUTH ***************************-->
+            <dependency>
+                <groupId>org.apache.shiro</groupId>
+                <artifactId>shiro-core</artifactId>
+                <version>${shiro.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.shiro</groupId>
+                <artifactId>shiro-web</artifactId>
+                <version>${shiro.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.shiro</groupId>
+                <artifactId>shiro-spring</artifactId>
+                <version>${shiro.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.shiro</groupId>
+                <artifactId>shiro-quartz</artifactId>
+                <version>${shiro.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.shiro</groupId>
+                <artifactId>shiro-ehcache</artifactId>
+                <version>${shiro.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+</project>

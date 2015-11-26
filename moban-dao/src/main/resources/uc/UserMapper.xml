@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gehua.moban.dao.service.dao.uc.UserMapper">
+	<resultMap type="com.gehua.moban.model.entity.uc.User" id="userResultMap">
+  	   <id column="uc_id" property="id" />
+  	   <result column="uc_name" property="name" />
+  	   <result column="uc_pswd" property="pswd" />
+	</resultMap>
+
+	<!--<select id="selectByPages" parameterType="User" resultMap="userResultMap">-->
+		<!--SELECT * FROM uc_user-->
+	<!--</select>-->
+</mapper>

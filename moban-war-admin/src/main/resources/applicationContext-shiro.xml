@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="
+          http://www.springframework.org/schema/beans 
+          http://www.springframework.org/schema/beans/spring-beans.xsd
+       	  http://www.springframework.org/schema/aop 
+       	  http://www.springframework.org/schema/aop/spring-aop.xsd
+          http://www.springframework.org/schema/util 
+          http://www.springframework.org/schema/util/spring-util.xsd">
+
+	<!-- ShiroFilter是整个Shiro的入口点，用于拦截需要安全控制的请求进行处理,web.xml里边为配置入口 -->
+	<bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
+		<property name="securityManager" ref="securityManager" /> <!--安全管理器：SecurityManagerShiro的核心 -->
+		<property name="loginUrl" value="/login" />
+		<property name="filterChainDefinitions"> <!--过滤器链:@see http://jinnianshilongnian.iteye.com/blog/2025656 -->
+			<value>
+				/images/**=anon
+				/css/**=anon
+				/js/**=anon
+				/pages/**=anon
+				/druid/**=anon
+				/uploadify/**=anon
+				/uploadServlet/**=anon
+				/picture/**=anon
+				/ueditor/**=anon
+				/index/**=anon
+				/favicon.ico = anon
+				/login=authc <!-- authenticated 权限验证地址 -->
+				/logout=logout
+				/**=authc	<!-- 除上面anon之外,shiro拦截所有请求 -->
+			</value>
+		</property>
+	</bean>
+
+	<!--安全管理器:所有与安全有关的操作都会与SecurityManager交互 -->
+	<bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
+		<property name="realm" ref="customerUserRealm" />
+		<property name="sessionManager" ref="sessionManager" />
+		<property name="cacheManager" ref="cacheManager" />
+	</bean>
+
+	<!-- 自定义身份验证管理域 -->
+	<bean id="customerUserRealm" class="com.ielee.controller.context.CustomerUserRealm" />
+
+	<!-- **************************** session ************************ -->
+	<!-- 会话管理器 ，采用默认的Web会话管理 -->
+	<bean id="sessionManager" class="org.apache.shiro.web.session.mgt.DefaultWebSessionManager">
+		<property name="globalSessionTimeout" value="180000000" />
+		<property name="deleteInvalidSessions" value="true" />
+		<property name="sessionDAO" ref="sessionDAO" /><!-- 配置session的GRUD操作 -->
+		<property name="sessionValidationInterval" value="180000000" />
+		<property name="sessionValidationSchedulerEnabled" value="true" />
+		<property name="sessionValidationScheduler" ref="sessionValidationScheduler" />
+		<property name="cacheManager" ref="cacheManager" />
+		<property name="sessionIdCookieEnabled" value="true" />
+		<property name="sessionIdCookie" ref="sessionIdCookie" />
+	</bean>
+
+	<bean id="sessionDAO" class="org.apache.shiro.session.mgt.eis.EnterpriseCacheSessionDAO">
+		<property name="activeSessionsCacheName" value="shiro-activeSessionCache" />
+		<property name="sessionIdGenerator" ref="sessionIdGenerator" />
+	</bean>
+
+	<!-- 会话验证调度(使用默认session有效验证) -->
+	<bean id="sessionValidationScheduler" class="org.apache.shiro.session.mgt.quartz.QuartzSessionValidationScheduler">
+		<property name="sessionValidationInterval" value="180000000" />
+		<property name="sessionManager" ref="sessionManager" />
+	</bean>
+
+	<bean id="sessionIdCookie" class="org.apache.shiro.web.servlet.SimpleCookie">
+		<constructor-arg value="uid" />
+		<property name="path" value="/" />
+		<property name="httpOnly" value="true" />
+		<property name="maxAge" value="2592000" />
+	</bean>
+
+	<bean id="sessionIdGenerator" class="org.apache.shiro.session.mgt.eis.JavaUuidSessionIdGenerator" />
+
+	<!-- **************************** cache ************************ -->
+	<!-- 缓存管理器 使用Ehcache实现 -->
+	<bean id="cacheManager" class="org.apache.shiro.cache.ehcache.EhCacheManager">
+		<property name="cacheManagerConfigFile" value="classpath:ehcache/ehcache.xml" />
+	</bean>
+		<!-- 保证实现了Shiro内部lifecycle函数的bean执行 -->
+	<bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor" />
+</beans>

@@ -1,0 +1,18 @@
+.tab input{height:20px;width:170px;}
+ul{display:block;margin:0;padding:0;list-style:none;}
+li{display:block;margin:0;padding:0;list-style: none;}
+img{border:0;}
+dl,dt,dd,span{margin:0;padding:0;}
+a,a:focus{text-decoration:none;color:#000;outline:none;blr:expression(this.onFocus=this.blur());}
+a:hover{color:#00a4ac;text-decoration:none;}
+table{border-collapse:collapse;border-spacing: 0;}
+cite{font-style:normal;}
+h2{font-weight:normal;}
+/*tab*/
+.tab b{color:#ea2020; padding-left:3px;}
+.tab tr{padding:50px;}
+.tab legend{color:#848383;}
+.tab form ul li{padding:10px;}
+#album  li{padding:0px;}
+#rt li{padding:0px;}
+.tab tr td{padding:5px}

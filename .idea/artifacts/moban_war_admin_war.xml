@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="moban-war-admin:war">
+    <output-path>$PROJECT_DIR$/moban-war-admin/target</output-path>
+    <root id="archive" name="moban-war-admin.war">
+      <element id="artifact" artifact-name="moban-war-admin:war exploded" />
+    </root>
+  </artifact>
+</component>

@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		   xmlns:tx="http://www.springframework.org/schema/tx"
+		   xmlns:aop="http://www.springframework.org/schema/aop"
+		   xmlns:context="http://www.springframework.org/schema/context"
+		   xmlns="http://www.springframework.org/schema/beans"
+		   xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/tx
+       http://www.springframework.org/schema/tx/spring-tx.xsd
+       http://www.springframework.org/schema/aop
+       http://www.springframework.org/schema/aop/spring-aop.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context.xsd">
+    
+    <!-- scan service  -->
+    <context:component-scan base-package="com.gehua.moban.service">
+        <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+    </context:component-scan>
+    <!-- datasource  -->
+   	<bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close"> 
+	    <property name="url" value="${datasource.url}" />
+	    <property name="username" value="${datasource.username}" />
+	    <property name="password" value="${datasource.password}" />
+	    <property name="maxActive" value="${datasource.maxActive}" />
+	    <property name="maxWait" value="${datasource.maxWait}" />
+	    
+	    <property name="initialSize" value="1" />
+	    <property name="minIdle" value="1" />
+	    <property name="timeBetweenEvictionRunsMillis" value="3000" />
+	    <property name="minEvictableIdleTimeMillis" value="300000" />
+	    <property name="validationQuery" value="SELECT 'x'" />
+	    <property name="testWhileIdle" value="true" />
+	    <property name="testOnBorrow" value="false" />
+	    <property name="testOnReturn" value="false" />
+	    <!-- <property name="poolPreparedStatements" value="false" /> -->
+	    <property name="maxPoolPreparedStatementPerConnectionSize" value="500" />
+	</bean>
+    <!-- sqlSessionFactory,mybatis -->
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">  
+		<property name="dataSource" ref="dataSource" />  
+		<property name="configLocation" value="classpath:application-entity.xml"></property>
+		<!-- 扫描model包-->
+		<property name="typeAliasesPackage" value="com.gehua.moban.model.entity"/>
+		<property name="plugins"><!--分页插件-->
+			<array>
+				<bean class="com.github.pagehelper.PageHelper">
+					<property name="properties">
+						<value>
+							dialect=mysql
+							reasonable=true
+						</value>
+					</property>
+				</bean>
+			</array>
+		</property>
+	</bean>
+	<!-- scann mapper-->
+	<bean class="tk.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="basePackage" value="com.gehua.moban.dao"/>
+		<property name="properties">
+			<value>
+				mappers=com.gehua.moban.mybatis.MyBatisBaseMapper
+			</value>
+		</property>
+	</bean>
+	<!-- transaction -->
+	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource"></property>
+	</bean>
+	<tx:advice id="txAdvice" transaction-manager="transactionManager">
+		<tx:attributes>
+			<tx:method name="create*" propagation="REQUIRED" read-only="false" rollback-for="java.lang.Exception" />
+			<tx:method name="del*" propagation="REQUIRED" read-only="false"  rollback-for="java.lang.Exception"/>
+			<tx:method name="update*" propagation="REQUIRED" read-only="false"  rollback-for="java.lang.Exception" />
+		</tx:attributes>
+	</tx:advice>
+	<aop:config proxy-target-class="true" expose-proxy="true">
+		<aop:pointcut id="uc" expression="execution(* com.gehua.moban.service..*(..))" />
+		<aop:advisor pointcut-ref="uc" advice-ref="txAdvice" />
+	</aop:config>
+ </beans>
