@@ -69,11 +69,11 @@ public interface WxMpConfig {
      * 设置appid
      * @return
      */
-    public String setAppId();
+    public void setAppId(String appId);
 
     /**
      * 设置appsecret
      * @return
      */
-    public String setSecret();
+    public void setSecret(String secret);
 }
