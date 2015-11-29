@@ -4,11 +4,11 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <parent>
-        <groupId>cn.mobilemix.allin</groupId>
-        <artifactId>opensesame</artifactId>
-        <version>1.0</version>
-    </parent>
+    <!--<parent>-->
+        <!--<groupId>cn.mobilemix.allin</groupId>-->
+        <!--<artifactId>opensesame</artifactId>-->
+        <!--<version>1.0</version>-->
+    <!--</parent>-->
 
     <groupId>com.gehua.moban</groupId>
     <artifactId>moban</artifactId>
@@ -21,6 +21,7 @@
         <module>moban-dao</module>
         <module>moban-service</module>
         <module>moban-war-admin</module>
+        <module>moban-sdk</module>
     </modules>
 
     <properties>

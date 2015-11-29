@@ -1,11 +1,11 @@
 package Test;
 
 import com.momix.sdk.net.http.api.MyHttp;
-import com.momix.sdk.net.http.api.imple.defaults.MyHttpURLConnection;
+import com.momix.sdk.net.http.api.impl.MyHttpURLConnection;
 import com.momix.sdk.parser.exception.ApiException;
 import com.momix.sdk.weixin.mp.api.WxMpAuthService;
 import com.momix.sdk.weixin.mp.api.WxMpConfig;
-import com.momix.sdk.weixin.mp.api.impl.defaults.WxMpAuthServiceImpl;
+import com.momix.sdk.weixin.mp.api.impl.WxMpAuthServiceImpl;
 import com.momix.sdk.weixin.mp.exceptions.WxException;
 
 /**

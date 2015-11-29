@@ -6,6 +6,7 @@
       <module fileurl="file://$PROJECT_DIR$/moban-commons/moban-commons.iml" filepath="$PROJECT_DIR$/moban-commons/moban-commons.iml" />
       <module fileurl="file://$PROJECT_DIR$/moban-dao/moban-dao.iml" filepath="$PROJECT_DIR$/moban-dao/moban-dao.iml" />
       <module fileurl="file://$PROJECT_DIR$/moban-model/moban-model.iml" filepath="$PROJECT_DIR$/moban-model/moban-model.iml" />
+      <module fileurl="file://$PROJECT_DIR$/moban-sdk/moban-sdk.iml" filepath="$PROJECT_DIR$/moban-sdk/moban-sdk.iml" />
       <module fileurl="file://$PROJECT_DIR$/moban-service/moban-service.iml" filepath="$PROJECT_DIR$/moban-service/moban-service.iml" />
       <module fileurl="file://$PROJECT_DIR$/moban-war-admin/moban-war-admin.iml" filepath="$PROJECT_DIR$/moban-war-admin/moban-war-admin.iml" />
     </modules>

@@ -1,7 +1,7 @@
 package Test;
 
 import com.momix.sdk.weixin.mp.api.WxMpConfig;
-import com.momix.sdk.weixin.mp.api.impl.defaults.WxMpConfigInMemory;
+import com.momix.sdk.weixin.mp.api.impl.WxMpConfigInMemory;
 
 /**
  * Created by rono on 2015/11/27.

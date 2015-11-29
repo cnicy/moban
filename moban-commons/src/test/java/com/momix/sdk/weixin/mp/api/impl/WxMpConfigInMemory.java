@@ -1,4 +1,4 @@
-package com.momix.sdk.weixin.mp.api.impl.defaults;
+package com.momix.sdk.weixin.mp.api.impl;
 
 import com.momix.sdk.weixin.mp.api.WxMpConfig;
 

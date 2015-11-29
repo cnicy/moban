@@ -17,39 +17,16 @@
       <profile default="true" name="Default" enabled="false">
         <processorPath useClasspath="true" />
       </profile>
-      <profile default="false" name="Annotation profile for moban-commons" enabled="true">
-        <sourceOutputDir name="target\generated-sources\annotations" />
-        <sourceTestOutputDir name="target\generated-test-sources\test-annotations" />
+      <profile default="false" name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <processorPath useClasspath="true" />
         <module name="moban-commons" />
-      </profile>
-      <profile default="false" name="Annotation profile for moban-model" enabled="true">
-        <sourceOutputDir name="target\generated-sources\annotations" />
-        <sourceTestOutputDir name="target\generated-test-sources\test-annotations" />
-        <outputRelativeToContentRoot value="true" />
-        <processorPath useClasspath="true" />
-        <module name="moban-model" />
-      </profile>
-      <profile default="false" name="Annotation profile for moban-dao" enabled="true">
-        <sourceOutputDir name="target\generated-sources\annotations" />
-        <sourceTestOutputDir name="target\generated-test-sources\test-annotations" />
-        <outputRelativeToContentRoot value="true" />
-        <processorPath useClasspath="true" />
         <module name="moban-dao" />
-      </profile>
-      <profile default="false" name="Annotation profile for moban-service" enabled="true">
-        <sourceOutputDir name="target\generated-sources\annotations" />
-        <sourceTestOutputDir name="target\generated-test-sources\test-annotations" />
-        <outputRelativeToContentRoot value="true" />
-        <processorPath useClasspath="true" />
+        <module name="moban-model" />
+        <module name="moban-sdk" />
         <module name="moban-service" />
-      </profile>
-      <profile default="false" name="Annotation profile for moban-war-admin" enabled="true">
-        <sourceOutputDir name="target\generated-sources\annotations" />
-        <sourceTestOutputDir name="target\generated-test-sources\test-annotations" />
-        <outputRelativeToContentRoot value="true" />
-        <processorPath useClasspath="true" />
         <module name="moban-war-admin" />
       </profile>
     </annotationProcessing>
@@ -58,6 +35,7 @@
       <module name="moban-commons" target="1.7" />
       <module name="moban-dao" target="1.7" />
       <module name="moban-model" target="1.7" />
+      <module name="moban-sdk" target="1.7" />
       <module name="moban-service" target="1.7" />
       <module name="moban-war-admin" target="1.7" />
     </bytecodeTargetLevel>
