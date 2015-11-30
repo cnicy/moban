@@ -1,6 +1,6 @@
 package com.momix.sdk.weixin.mp.bean;
 
-import com.momix.sdk.parser.exception.ApiException;
+import com.momix.sdk.common.exception.SdkException;
 import com.momix.sdk.parser.json.JsonParser;
 
 import java.io.Serializable;
@@ -30,7 +30,7 @@ public class WxError implements Serializable{
         this.errmsg = errmsg;
     }
 
-    public static WxError fromJson(final String json) throws ApiException {
+    public static WxError fromJson(final String json) throws SdkException {
         return new JsonParser().from(json,WxError.class);
     }
 }

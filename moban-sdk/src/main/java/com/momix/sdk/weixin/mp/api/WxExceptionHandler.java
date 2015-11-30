@@ -1,11 +1,11 @@
 package com.momix.sdk.weixin.mp.api;
 
-import com.momix.sdk.weixin.mp.exceptions.WxException;
+import com.momix.sdk.common.exception.SdkException;
 
 /**
  * WxErrorException处理器
  */
 public interface WxExceptionHandler {
 
-  public void handle(WxException e);
+  public void handle(SdkException e);
 }

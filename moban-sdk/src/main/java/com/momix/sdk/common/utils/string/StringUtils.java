@@ -1,6 +1,6 @@
-package com.momix.sdk.utils.string;
+package com.momix.sdk.common.utils.string;
 
-import com.momix.sdk.utils.constants.Constants;
+import com.momix.sdk.common.constants.Constants;
 
 import java.text.NumberFormat;
 import java.util.regex.Matcher;

@@ -1,4 +1,4 @@
-package com.momix.sdk.utils.constants;
+package com.momix.sdk.common.utils.constants;
 
 public final class Constants {
 	

@@ -1,8 +1,8 @@
 package com.momix.sdk.weixin.mp.api;
 
+import com.momix.sdk.common.exception.SdkException;
 import com.momix.sdk.weixin.mp.bean.WxMpMessage;
 import com.momix.sdk.weixin.mp.bean.WxMpOutMessage;
-import com.momix.sdk.weixin.mp.exceptions.WxException;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -78,7 +78,7 @@ public class WxMpMessageRouterRule implements Serializable{
                 res = handler.handler(wxMpMessage,context,wxMpService,wxSessionManager); // 返回最后handler的结果
             }
             return res;
-        }catch (WxException e) {
+        }catch (SdkException e) {
             wxExceptionHandler.handle(e);
         }
         return null;

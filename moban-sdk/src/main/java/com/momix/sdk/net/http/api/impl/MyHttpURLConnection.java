@@ -17,6 +17,10 @@ import java.util.Map;
  * Created by rono on 2015/11/27.
  */
 public class MyHttpURLConnection implements MyHttp{
+    public MyHttpURLConnection() {
+        System.out.println("http init......");
+    }
+
     @Override
     public HttpResponseParam get(HttpRequestParams req) throws IOException{
         if(null==req)

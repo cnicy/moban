@@ -11,6 +11,11 @@ public class WxMpConfigInMemory implements WxMpConfig{
     protected  volatile String access_token;
     protected  volatile String appId;
     protected  volatile String secret;
+    protected  volatile String token;
+
+    public WxMpConfigInMemory() {
+        System.out.println("WxMpConfigInMemory init......");
+    }
 
     @Override
     public String getAccessToken() {
@@ -71,5 +76,13 @@ public class WxMpConfigInMemory implements WxMpConfig{
     @Override
     public void setSecret(String secret) {
         this.secret = secret;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 }

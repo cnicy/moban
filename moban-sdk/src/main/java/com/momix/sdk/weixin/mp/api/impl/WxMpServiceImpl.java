@@ -1,16 +1,17 @@
 package com.momix.sdk.weixin.mp.api.impl;
 
+import com.momix.sdk.common.exception.SdkError;
+import com.momix.sdk.common.exception.SdkException;
 import com.momix.sdk.net.http.api.MyHttp;
 import com.momix.sdk.net.http.bean.HttpRequestParams;
 import com.momix.sdk.net.http.bean.HttpResponseParam;
-import com.momix.sdk.parser.exception.ApiException;
-import com.momix.sdk.weixin.mp.api.WxMpService;
+import com.momix.sdk.parser.json.JsonParser;
 import com.momix.sdk.weixin.mp.api.WxMpConfig;
+import com.momix.sdk.weixin.mp.api.WxMpService;
 import com.momix.sdk.weixin.mp.bean.WxAccessToken;
-import com.momix.sdk.weixin.mp.bean.WxError;
 import com.momix.sdk.weixin.mp.bean.WxJsapiSignature;
+import com.momix.sdk.weixin.mp.commons.SignUtil;
 import com.momix.sdk.weixin.mp.commons.WxHttpUrl;
-import com.momix.sdk.weixin.mp.exceptions.WxException;
 
 import java.io.IOException;
 
@@ -27,23 +28,31 @@ public class WxMpServiceImpl implements WxMpService {
     /**网络请求*/
     private MyHttp http;
 
+    public WxMpServiceImpl() {
+        System.out.println("WxMpService init...");
+    }
+
     public WxMpServiceImpl(MyHttp http, WxMpConfig wxMpConfig) {
         this.http = http;
         this.wxMpConfig = wxMpConfig;
     }
 
     @Override
-    public boolean checkSignature(String timestamp, String nonce, String signature) {
-        return false;
+    public boolean checkSignature(String signature,String timestamp, String nonce) {
+        try{
+            return SignUtil.checkSignature(wxMpConfig.getAccessToken(),signature,timestamp,nonce);
+        }catch (Exception e){
+            return false;
+        }
     }
 
     @Override
-    public String getAccessToken() throws WxException {
+    public String getAccessToken() throws SdkException {
         return getAccessToken(false);
     }
 
     @Override
-    public String getAccessToken(boolean forceRefresh) throws WxException {
+    public String getAccessToken(boolean forceRefresh) throws SdkException {
         if(forceRefresh){
             wxMpConfig.expireAccessToken(); // 强制过期access_token
         }
@@ -56,16 +65,16 @@ public class WxMpServiceImpl implements WxMpService {
                         req.setUri(url);
                         HttpResponseParam res = http.get(req);
 
-                        WxError error = WxError.fromJson(res.getContent());
+                        SdkError error = new JsonParser().from(res.getContent(),SdkError.class);
                         if(null!=error && error.getErrcode() !=0){
-                            throw new WxException(error);
+                            throw new SdkException(error);
                         }
                         WxAccessToken wxAccessToken = WxAccessToken.fromJson(res.getContent());
                         wxMpConfig.updateAccessToken(wxAccessToken.getAccess_token(), wxAccessToken.getExpires_in());
+                    }catch (SdkException e) {
+                        throw new RuntimeException(e);
                     } catch (IOException e) {
-                        throw new RuntimeException(e);
-                    }catch (ApiException e) {
-                        throw new RuntimeException(e);
+                        e.printStackTrace();
                     }
                 }
             }
@@ -74,17 +83,35 @@ public class WxMpServiceImpl implements WxMpService {
     }
 
     @Override
-    public String getJsapiTicket() throws WxException {
+    public String getJsapiTicket() throws SdkException {
         return null;
     }
 
     @Override
-    public String getJsapiTicket(boolean forceRefresh) throws WxException {
+    public String getJsapiTicket(boolean forceRefresh) throws SdkException {
         return null;
     }
 
     @Override
-    public WxJsapiSignature createJsapiSignature(String url) throws WxException {
+    public WxJsapiSignature createJsapiSignature(String url) throws SdkException {
         return null;
     }
+
+    public WxMpConfig getWxMpConfig() {
+        return wxMpConfig;
+    }
+
+    public void setWxMpConfig(WxMpConfig wxMpConfig) {
+        this.wxMpConfig = wxMpConfig;
+    }
+
+    public MyHttp getHttp() {
+        return http;
+    }
+
+    public void setHttp(MyHttp http) {
+        this.http = http;
+    }
+
+
 }

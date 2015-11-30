@@ -1,6 +1,6 @@
 package com.momix.sdk.parser.xml;
 
-import com.momix.sdk.parser.exception.ApiException;
+import com.momix.sdk.common.exception.SdkException;
 import org.w3c.dom.*;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -32,15 +32,15 @@ public final class XmlUtils {
 	 * Creates a new document instance.
 	 * 
 	 * @return a new document instance
-	 * @throws ApiException problem creating a new document
+	 * @throws SdkException problem creating a new document
 	 */
-	public static Document newDocument() throws ApiException {
+	public static Document newDocument() throws SdkException {
 		Document doc = null;
 		
 		try {
 			doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument();
 		} catch (ParserConfigurationException e) {
-			throw new ApiException(e);
+			throw new SdkException(e);
 		}
 
 		return doc;
@@ -51,9 +51,9 @@ public final class XmlUtils {
 	 * 
 	 * @param file the XML file instance
 	 * @return the document instance representing the entire XML document
-	 * @throws ApiException problem parsing the XML file
+	 * @throws SdkException problem parsing the XML file
 	 */
-	public static Document getDocument(File file) throws ApiException {
+	public static Document getDocument(File file) throws SdkException {
 		InputStream in = getInputStream(file);
 		return getDocument(new InputSource(in), null);
 	}
@@ -63,9 +63,9 @@ public final class XmlUtils {
 	 * 
 	 * @param xml the XML file input stream
 	 * @return the document instance representing the entire XML document
-	 * @throws ApiException problem parsing the XML input stream
+	 * @throws SdkException problem parsing the XML input stream
 	 */
-	public static Document getDocument(InputSource xml, InputStream xsd) throws ApiException {
+	public static Document getDocument(InputSource xml, InputStream xsd) throws SdkException {
 		Document doc = null;
 
 		try {
@@ -81,11 +81,11 @@ public final class XmlUtils {
 				validateXml(doc, xsd);
 			}
 		} catch (ParserConfigurationException e) {
-			throw new ApiException(e);
+			throw new SdkException(e);
 		} catch (SAXException e) {
-			throw new ApiException("XML_PARSE_ERROR", e);
+			throw new SdkException("XML_PARSE_ERROR", e);
 		} catch (IOException e) {
-			throw new ApiException("XML_READ_ERROR", e);
+			throw new SdkException("XML_READ_ERROR", e);
 		} finally {
 			closeStream(xml.getByteStream());
 		}
@@ -98,9 +98,9 @@ public final class XmlUtils {
 	 * 
 	 * @param tagName the name of the root element
 	 * @return a new element instance
-	 * @throws ApiException problem generating a new document
+	 * @throws SdkException problem generating a new document
 	 */
-	public static Element createRootElement(String tagName) throws ApiException {
+	public static Element createRootElement(String tagName) throws SdkException {
 		Document doc = newDocument();
 		Element root = doc.createElement(tagName);
 		doc.appendChild(root);
@@ -112,9 +112,9 @@ public final class XmlUtils {
 	 * 
 	 * @param xml the XML file input stream
 	 * @return the root element of parsed document
-	 * @throws ApiException problem parsing the XML file input stream
+	 * @throws SdkException problem parsing the XML file input stream
 	 */
-	public static Element getRootElementFromStream(InputStream xml) throws ApiException {
+	public static Element getRootElementFromStream(InputStream xml) throws SdkException {
 		return getDocument(new InputSource(xml), null).getDocumentElement();
 	}
 
@@ -123,9 +123,9 @@ public final class XmlUtils {
 	 * 
 	 * @param xml the XML file input stream
 	 * @return the root element of parsed document
-	 * @throws ApiException problem parsing the XML file input stream
+	 * @throws SdkException problem parsing the XML file input stream
 	 */
-	public static Element getRootElementFromStream(InputStream xml, InputStream xsd) throws ApiException {
+	public static Element getRootElementFromStream(InputStream xml, InputStream xsd) throws SdkException {
 		return getDocument(new InputSource(xml), xsd).getDocumentElement();
 	}
 
@@ -134,9 +134,9 @@ public final class XmlUtils {
 	 * 
 	 * @param xml the name of the XML file
 	 * @return the root element of parsed document
-	 * @throws ApiException problem parsing the XML file
+	 * @throws SdkException problem parsing the XML file
 	 */
-	public static Element getRootElementFromFile(File xml) throws ApiException {
+	public static Element getRootElementFromFile(File xml) throws SdkException {
 		return getDocument(xml).getDocumentElement();
 	}
 
@@ -145,11 +145,11 @@ public final class XmlUtils {
 	 * 
 	 * @param payload the XML payload representing the XML file.
 	 * @return the root element of parsed document
-	 * @throws ApiException problem parsing the XML payload
+	 * @throws SdkException problem parsing the XML payload
 	 */
-	public static Element getRootElementFromString(String payload) throws ApiException {
+	public static Element getRootElementFromString(String payload) throws SdkException {
 		if (payload == null || payload.length() < 1) {
-			throw new ApiException("XML_PAYLOAD_EMPTY");
+			throw new SdkException(new Exception("XML_PAYLOAD_EMPTY"));
 		}
 
 		StringReader sr = new StringReader(escapeXml(payload));
@@ -386,9 +386,9 @@ public final class XmlUtils {
 	 * 
 	 * @param node the node/element instance to convert
 	 * @return the XML payload representing the node/element
-	 * @throws ApiException problem converting XML to string
+	 * @throws SdkException problem converting XML to string
 	 */
-	public static String childNodeToString(Node node) throws ApiException {
+	public static String childNodeToString(Node node) throws SdkException {
 		String payload = null;
 
 		try {
@@ -403,7 +403,7 @@ public final class XmlUtils {
 			tf.transform(new DOMSource(node), new StreamResult(writer));
 			payload = escapeXml(writer.toString());
 		} catch (TransformerException e) {
-			throw new ApiException("XML_TRANSFORM_ERROR", e);
+			throw new SdkException("XML_TRANSFORM_ERROR", e);
 		}
 
 		return payload;
@@ -414,9 +414,9 @@ public final class XmlUtils {
 	 * 
 	 * @param node the node/document/element instance to convert
 	 * @return the XML payload representing the node/document/element
-	 * @throws ApiException problem converting XML to string
+	 * @throws SdkException problem converting XML to string
 	 */
-	public static String nodeToString(Node node) throws ApiException {
+	public static String nodeToString(Node node) throws SdkException {
 		String payload = null;
 
 		try {
@@ -431,7 +431,7 @@ public final class XmlUtils {
 			tf.transform(new DOMSource(node), new StreamResult(writer));
 			payload = escapeXml(writer.toString());
 		} catch (TransformerException e) {
-			throw new ApiException("XML_TRANSFORM_ERROR", e);
+			throw new SdkException("XML_TRANSFORM_ERROR", e);
 		}
 
 		return payload;
@@ -453,9 +453,9 @@ public final class XmlUtils {
 	 * 
 	 * @param file the XML file instance
 	 * @return the XML payload representing the XML file
-	 * @throws ApiException problem transforming XML to string
+	 * @throws SdkException problem transforming XML to string
 	 */
-	public static String xmlToString(File file) throws ApiException {
+	public static String xmlToString(File file) throws SdkException {
 		Element root = getRootElementFromFile(file);
 		return nodeToString(root);
 	}
@@ -465,9 +465,9 @@ public final class XmlUtils {
 	 * 
 	 * @param in the XML file input stream
 	 * @return the payload represents the XML file
-	 * @throws ApiException problem transforming XML to string
+	 * @throws SdkException problem transforming XML to string
 	 */
-	public static String xmlToString(InputStream in) throws ApiException {
+	public static String xmlToString(InputStream in) throws SdkException {
 		Element root = getRootElementFromStream(in);
 		return nodeToString(root);
 	}
@@ -477,9 +477,9 @@ public final class XmlUtils {
 	 * 
 	 * @param doc the XML node/document/element to save
 	 * @param file the XML file to save
-	 * @throws ApiException problem persisting XML file
+	 * @throws SdkException problem persisting XML file
 	 */
-	public static void saveToXml(Node doc, File file) throws ApiException {
+	public static void saveToXml(Node doc, File file) throws SdkException {
 		OutputStream out = null;
 
 		try {
@@ -495,7 +495,7 @@ public final class XmlUtils {
 			Result result = new StreamResult(out);
 			tf.transform(dom, result);
 		} catch (TransformerException e) {
-			throw new ApiException("XML_TRANSFORM_ERROR", e);
+			throw new SdkException("XML_TRANSFORM_ERROR", e);
 		} finally {
 			closeStream(out);
 		}
@@ -506,18 +506,18 @@ public final class XmlUtils {
 	 * 
 	 * @param xml the XML file to validate
 	 * @param xsd the XML schema file
-	 * @throws ApiException error occurs if validation fail
+	 * @throws SdkException error occurs if validation fail
 	 */
-	public static void validateXml(InputStream xml, InputStream xsd) throws ApiException {
+	public static void validateXml(InputStream xml, InputStream xsd) throws SdkException {
 		try {
 			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 			dbf.setNamespaceAware(true);
 			Document doc = dbf.newDocumentBuilder().parse(xml);
 			validateXml(doc, xsd);
 		} catch (SAXException e) {
-			throw new ApiException("XML_VALIDATE_ERROR", e);
+			throw new SdkException("XML_VALIDATE_ERROR", e);
 		} catch (Exception e) {
-			throw new ApiException("XML_READ_ERROR", e);
+			throw new SdkException("XML_READ_ERROR", e);
 		} finally {
 			closeStream(xml);
 			closeStream(xsd);
@@ -529,9 +529,9 @@ public final class XmlUtils {
 	 * 
 	 * @param root the root element of XML
 	 * @param xsd the XML schema file
-	 * @throws ApiException error occurs if validation fail
+	 * @throws SdkException error occurs if validation fail
 	 */
-	public static void validateXml(Node root, InputStream xsd) throws ApiException {
+	public static void validateXml(Node root, InputStream xsd) throws SdkException {
 		try {
 			Source source = new StreamSource(xsd);
 			Schema schema = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI).newSchema(source);
@@ -539,9 +539,9 @@ public final class XmlUtils {
 			Validator validator = schema.newValidator();
 			validator.validate(new DOMSource(root));
 		} catch (SAXException e) {
-			throw new ApiException("XML_VALIDATE_ERROR", e);
+			throw new SdkException("XML_VALIDATE_ERROR", e);
 		} catch (Exception e) {
-			throw new ApiException("XML_READ_ERROR", e);
+			throw new SdkException("XML_READ_ERROR", e);
 		} finally {
 			closeStream(xsd);
 		}
@@ -553,9 +553,9 @@ public final class XmlUtils {
 	 * @param payload the XML payload to convert
 	 * @param xsltFile the XML stylesheet file
 	 * @return the transformed XHTML/HTML format string
-	 * @throws ApiException problem converting XML to HTML
+	 * @throws SdkException problem converting XML to HTML
 	 */
-	public static String xmlToHtml(String payload, File xsltFile) throws ApiException {
+	public static String xmlToHtml(String payload, File xsltFile) throws SdkException {
 		String result = null;
 
 		try {
@@ -572,7 +572,7 @@ public final class XmlUtils {
 
 			result = sr.getWriter().toString();
 		} catch (TransformerException e) {
-			throw new ApiException("XML_TRANSFORM_ERROR", e);
+			throw new SdkException("XML_TRANSFORM_ERROR", e);
 		}
 
 		return result;
@@ -596,9 +596,9 @@ public final class XmlUtils {
 	 * 
 	 * @param payload the XML payload to encode
 	 * @return the encoded XML payload
-	 * @throws ApiException problem encoding the XML payload
+	 * @throws SdkException problem encoding the XML payload
 	 */
-	public static String encodeXml(String payload) throws ApiException {
+	public static String encodeXml(String payload) throws SdkException {
 		Element root = createRootElement(XMLConstants.XML_NS_PREFIX);
 		root.setTextContent(payload);
 		return childNodeToString(root.getFirstChild());
@@ -613,25 +613,25 @@ public final class XmlUtils {
 		}
 	}
 
-	private static InputStream getInputStream(File file) throws ApiException {
+	private static InputStream getInputStream(File file) throws SdkException {
 		InputStream in = null;
 
 		try {
 			in = new FileInputStream(file);
 		} catch (FileNotFoundException e) {
-			throw new ApiException("XML_FILE_NOT_FOUND", e);
+			throw new SdkException("XML_FILE_NOT_FOUND", e);
 		}
 
 		return in;
 	}
 
-	private static OutputStream getOutputStream(File file) throws ApiException {
+	private static OutputStream getOutputStream(File file) throws SdkException {
 		OutputStream in = null;
 
 		try {
 			in = new FileOutputStream(file);
 		} catch (FileNotFoundException e) {
-			throw new ApiException("XML_FILE_NOT_FOUND", e);
+			throw new SdkException("XML_FILE_NOT_FOUND", e);
 		}
 
 		return in;
@@ -652,7 +652,7 @@ public final class XmlUtils {
 		String s = nodeToString(root);
 		System.out.println(s);
 		//Element e = createRootElement("ROOT");
-	} catch (ApiException e) {
+	} catch (SdkException e) {
 		// TODO Auto-generated catch block
 		e.printStackTrace();
 	}

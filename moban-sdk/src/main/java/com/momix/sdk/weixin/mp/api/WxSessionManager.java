@@ -18,6 +18,4 @@ public interface WxSessionManager {
    * @return
    */
   public WxSession getSession(String sessionId, boolean create);
-
-
 }

@@ -1,8 +1,8 @@
 package com.momix.sdk.weixin.mp.api;
 
+import com.momix.sdk.common.exception.SdkException;
 import com.momix.sdk.weixin.mp.bean.WxMpMessage;
 import com.momix.sdk.weixin.mp.bean.WxMpOutMessage;
-import com.momix.sdk.weixin.mp.exceptions.WxException;
 
 import java.util.Map;
 
@@ -12,5 +12,5 @@ import java.util.Map;
  */
 public interface WxMpMessageHandler {
     public WxMpOutMessage handler(WxMpMessage wxMpMessage,Map<String,Object> context,
-                                  WxMpService wxMpService,WxSessionManager wxSessionManager)throws WxException;
+                                  WxMpService wxMpService,WxSessionManager wxSessionManager)throws SdkException;
 }

@@ -1,9 +1,7 @@
 package com.momix.sdk.weixin.mp.api;
 
+import com.momix.sdk.common.exception.SdkException;
 import com.momix.sdk.weixin.mp.bean.WxJsapiSignature;
-import com.momix.sdk.weixin.mp.exceptions.WxException;
-
-import java.io.IOException;
 
 /**
  * 基础信息
@@ -22,9 +20,9 @@ public interface WxMpService {
      * 获取access_token, 不强制刷新access_token
      * @see #getAccessToken(boolean)
      * @return
-     * @throws WxException
+     * @throws SdkException
      */
-    public String getAccessToken() throws WxException;
+    public String getAccessToken() throws SdkException;
 
     /**
      * <pre>
@@ -37,14 +35,14 @@ public interface WxMpService {
      * @param forceRefresh 强制刷新
      * @return
      */
-    public String getAccessToken(boolean forceRefresh) throws WxException, IOException;
+    public String getAccessToken(boolean forceRefresh) throws SdkException;
 
     /**
      * 获得jsapi_ticket,不强制刷新jsapi_ticket
      * @see #getJsapiTicket(boolean)
      * @return
      */
-    public String getJsapiTicket() throws WxException;
+    public String getJsapiTicket() throws SdkException;
 
     /**
      * <pre>
@@ -54,9 +52,9 @@ public interface WxMpService {
      * </pre>
      * @param forceRefresh 强制刷新
      * @return
-     * @throws WxException
+     * @throws SdkException
      */
-    public String getJsapiTicket(boolean forceRefresh) throws WxException;
+    public String getJsapiTicket(boolean forceRefresh) throws SdkException;
     /**
      * <pre>
      * <a href="http://mp.weixin.qq.com/wiki/7/aaa137b55fb2e0456bf8dd9148dd613f.html#.E9.99.84.E5.BD.951-JS-SDK.E4.BD.BF.E7.94.A8.E6.9D.83.E9.99.90.E7.AD.BE.E5.90.8D.E7.AE.97.E6.B3.95">创建调用jsapi时所需要的签名</a>
@@ -64,5 +62,5 @@ public interface WxMpService {
      * @param url       url
      * @return
      */
-    public WxJsapiSignature createJsapiSignature(String url) throws WxException;
+    public WxJsapiSignature createJsapiSignature(String url) throws SdkException;
 }

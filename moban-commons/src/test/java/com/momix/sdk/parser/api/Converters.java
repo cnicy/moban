@@ -1,7 +1,7 @@
 package com.momix.sdk.parser.api;
 
 import com.momix.sdk.parser.exception.ApiException;
-import com.momix.sdk.utils.string.StringUtils;
+import com.momix.sdk.common.utils.string.StringUtils;
 
 import java.beans.BeanInfo;
 import java.beans.Introspector;

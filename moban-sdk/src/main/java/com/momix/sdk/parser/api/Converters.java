@@ -1,7 +1,7 @@
 package com.momix.sdk.parser.api;
 
-import com.momix.sdk.parser.exception.ApiException;
-import com.momix.sdk.utils.string.StringUtils;
+import com.momix.sdk.common.exception.SdkException;
+import com.momix.sdk.common.utils.string.StringUtils;
 
 import java.beans.BeanInfo;
 import java.beans.Introspector;
@@ -28,7 +28,7 @@ public class Converters {
 	
 	public static String DATE_TIME_ZONE = "GMT+8";
 	
-	public static <T> T reader(Class<T> clazz,ObjectReader reader)throws ApiException {
+	public static <T> T reader(Class<T> clazz,ObjectReader reader)throws SdkException {
 		T rsp = null;
 		try{
 			rsp = clazz.newInstance();
@@ -71,7 +71,7 @@ public class Converters {
 							if(value instanceof String){
 								writerMethod.invoke(rsp, value.toString());
 							}else if(CHECK_TYPE){
-									throw new ApiException("field:"+fieldName+" value is not a string!");
+									throw new SdkException("field:"+fieldName+" value is not a string!");
 							}else
 								writerMethod.invoke(rsp, value.toString());
 						// Long
@@ -79,7 +79,7 @@ public class Converters {
 							if(value instanceof Long){
 								writerMethod.invoke(rsp,(Long) value);
 							}else if(CHECK_TYPE){
-								throw new ApiException("field:"+fieldName+" value is not a Number(Long)!");
+								throw new SdkException("field:"+fieldName+" value is not a Number(Long)!");
 							}else if(StringUtils.isNumeric(value))
 								writerMethod.invoke(rsp,Long.valueOf(value.toString()));
 						// Integer
@@ -87,7 +87,7 @@ public class Converters {
 							if (value instanceof Integer) {
 								writerMethod.invoke(rsp, (Integer) value);
 							} else if(CHECK_TYPE){
-								throw new ApiException("field:"+fieldName+" value is not a Number(Integer)!");
+								throw new SdkException("field:"+fieldName+" value is not a Number(Integer)!");
 							}else if(StringUtils.isNumeric(value))
 								writerMethod.invoke(rsp,Integer.valueOf(value.toString()));
 						// Double
@@ -95,7 +95,7 @@ public class Converters {
 							if (value instanceof Double) {
 								writerMethod.invoke(rsp, (Double) value);
 							} else if(CHECK_TYPE){
-								throw new ApiException("field:"+fieldName+" value is not a Number(Double)!");
+								throw new SdkException("field:"+fieldName+" value is not a Number(Double)!");
 							}else if(StringUtils.isNumeric(value))
 								writerMethod.invoke(rsp,Double.valueOf(value.toString()));
 						// Number
@@ -103,14 +103,14 @@ public class Converters {
 							if (value instanceof Number) {
 								writerMethod.invoke(rsp, (Number) value);
 							} else if(CHECK_TYPE){
-								throw new ApiException("field:"+fieldName+" value is not a Number!");
+								throw new SdkException("field:"+fieldName+" value is not a Number!");
 							}
 						// Boolean							
 						}else if (Boolean.class.isAssignableFrom(typeClass)){
 							if (value instanceof Boolean) {
 								writerMethod.invoke(rsp, (Boolean) value);
 							} else if(CHECK_TYPE){
-								throw new ApiException("field:"+fieldName+" value is not a Boolean!");
+								throw new SdkException("field:"+fieldName+" value is not a Boolean!");
 							}else
 								writerMethod.invoke(rsp, value.toString());
 						// Date
@@ -150,12 +150,12 @@ public class Converters {
 				}
 			}
 		}catch(Exception e){
-			throw new ApiException(e.getMessage(),e);
+			throw new SdkException(e.getMessage(),e);
 		}
 		return rsp;
 	}
 	
-	public static void reader(Object obj,ObjectWriter writer) throws ApiException{
+	public static void reader(Object obj,ObjectWriter writer) throws SdkException{
 		Class<?> clazz = obj.getClass();
 		try{
 			// java 内省机制或者对象属性
@@ -233,7 +233,7 @@ public class Converters {
 				}
 			}
 		}catch(Exception e){
-			throw new ApiException(e.getMessage(),e);
+			throw new SdkException(e.getMessage(),e);
 		}
 	}
 	

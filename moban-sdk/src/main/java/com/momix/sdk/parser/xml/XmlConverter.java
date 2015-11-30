@@ -1,10 +1,10 @@
 package com.momix.sdk.parser.xml;
 
+import com.momix.sdk.common.exception.SdkException;
 import com.momix.sdk.parser.api.Converter;
 import com.momix.sdk.parser.api.Converters;
 import com.momix.sdk.parser.api.ObjectReader;
 import com.momix.sdk.parser.api.ObjectWriter;
-import com.momix.sdk.parser.exception.ApiException;
 import org.w3c.dom.Element;
 
 import java.text.DateFormat;
@@ -17,19 +17,19 @@ import java.util.List;
 
 public class XmlConverter implements Converter {
 	@Override
-	public <T> T fromResponse(String text, Class<T> clazz) throws ApiException {
+	public <T> T fromResponse(String text, Class<T> clazz) throws SdkException {
 		Element root = XmlUtils.getRootElementFromString(text);
 		return getModelFromXML(root,clazz);
 	}
 
 	@Override
-	public String toResponse(Object obj) throws ApiException {
+	public String toResponse(Object obj) throws SdkException {
 		Element root = XmlUtils.createRootElement("xml");
 		setModelFromObject(obj,root);
 		return XmlUtils.nodeToString(root);
 	}
-	
-	private <T> T getModelFromXML(final Element element,Class<T> clazz) throws ApiException{
+
+	private <T> T getModelFromXML(final Element element,Class<T> clazz) throws SdkException{
 		return Converters.reader(clazz, new ObjectReader() {
 			/**
 			 * 判断xml节点中是否存在name属性
@@ -45,7 +45,7 @@ public class XmlConverter implements Converter {
 			}
 
 			@Override
-			public Object getObject(Object name, Class<?> type) throws ApiException {
+			public Object getObject(Object name, Class<?> type) throws SdkException {
 				Element childE = XmlUtils.getChildElement(element, (String) name);
 				if (childE != null) {
 					// 递归遍历获取对象数据
@@ -66,9 +66,9 @@ public class XmlConverter implements Converter {
 			 </ListName>
 			 */
 			@Override
-			public List<?> getListObjects(Object listName, Object itemName, Class<?> subType) throws ApiException {
+			public List<?> getListObjects(Object listName, Object itemName, Class<?> subType) throws SdkException {
 				List<Object> list = null;
-				// 获取list节点  
+				// 获取list节点
 				Element listE = XmlUtils.getChildElement(element, (String) listName);
 				if (null != listE) {
 					list = new ArrayList<Object>();
@@ -94,7 +94,7 @@ public class XmlConverter implements Converter {
 							try {
 								obj = format.parse(value);
 							} catch (ParseException e) {
-								throw new ApiException(e);
+								throw new SdkException(e);
 							}
 						} else {
 							// 其他嵌套类型，再次递归获取
@@ -108,14 +108,14 @@ public class XmlConverter implements Converter {
 			}
 		});
 	}
-	private void setModelFromObject(final Object obj,final Element element) throws ApiException{
+	private void setModelFromObject(final Object obj,final Element element) throws SdkException{
 		Converters.reader(obj, new ObjectWriter() {
 			@Override
 			public void setPrimitiveObject(String name, Object value) {
 				XmlUtils.appendElement(element, name,(String)value);
 			}
 			@Override
-			public void setObject(String name,Object subValue) throws ApiException {
+			public void setObject(String name,Object subValue) throws SdkException {
 				Element childE = XmlUtils.createRootElement(name);
 				// 递归获取对象下面的数据
 				if(null !=subValue){
@@ -123,13 +123,13 @@ public class XmlConverter implements Converter {
 					// 创建一个xml element对象，并写入到root中
 					XmlUtils.appendElement(element, childE);
 				}else
-					return ; // 递归结束条件 
+					return ; // 递归结束条件
 			}
 			@Override
 			public void setListObjects(String listName, String itemName,
-					Object subValues, Class<?> subType) throws ApiException {
+									   Object subValues, Class<?> subType) throws SdkException {
 				Element listE = XmlUtils.createRootElement(listName);
-				
+
 				if(null!=listE){
 					if(subValues instanceof List){
 						Iterator<?> iter = ((List<?>) subValues).iterator();
@@ -138,22 +138,22 @@ public class XmlConverter implements Converter {
 							Element childE = null;
 							if (String.class.isAssignableFrom(subType)) {
 								XmlUtils.appendElement(listE, itemName, value.toString());
-								
+
 							}else if (Integer.class.isAssignableFrom(subType)) {
 								XmlUtils.appendElement(listE, itemName, value.toString());
-								
+
 							} else if (Long.class.isAssignableFrom(subType)) {
 								XmlUtils.appendElement(listE, itemName, value.toString());
-								
+
 							}else if (Float.class.isAssignableFrom(subType)) {
 								XmlUtils.appendElement(listE, itemName, value.toString());
-								
+
 							}else if (Double.class.isAssignableFrom(subType)) {
 								XmlUtils.appendElement(listE, itemName, value.toString());
-								
+
 							}  else if (Boolean.class.isAssignableFrom(subType)) {
 								XmlUtils.appendElement(listE, itemName, value.toString());
-								
+
 							}else{
 								// 其他嵌套类型，再次递归获取
 								childE = XmlUtils.createRootElement(itemName);
