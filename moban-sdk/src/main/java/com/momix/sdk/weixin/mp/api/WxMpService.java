@@ -2,12 +2,14 @@ package com.momix.sdk.weixin.mp.api;
 
 import com.momix.sdk.common.exception.SdkException;
 import com.momix.sdk.weixin.mp.bean.WxJsapiSignature;
+import com.momix.sdk.weixin.mp.bean.WxMenu;
 
 /**
  * 基础信息
  * Created by rono on 2015/11/26.
  */
 public interface WxMpService {
+    // region 验证信息
     /**
      * <a href="http://mp.weixin.qq.com/wiki/index.php?title=验证消息真实性">验证推送过来的消息的正确性</a>
      * @param timestamp
@@ -63,4 +65,17 @@ public interface WxMpService {
      * @return
      */
     public WxJsapiSignature createJsapiSignature(String url) throws SdkException;
+    // endregion
+
+    // region 菜单信息
+
+    /**
+     * 创建菜单
+     * @param wxMenu
+     * @throws SdkException
+     */
+    public void menuCreate(WxMenu wxMenu)throws SdkException;
+
+
+    // endregion
 }

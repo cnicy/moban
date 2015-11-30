@@ -2,6 +2,7 @@ package com.momix.sdk.weixin.mp.api.impl;
 
 import com.momix.sdk.common.exception.SdkError;
 import com.momix.sdk.common.exception.SdkException;
+import com.momix.sdk.common.utils.string.StringUtils;
 import com.momix.sdk.net.http.api.MyHttp;
 import com.momix.sdk.net.http.bean.HttpRequestParams;
 import com.momix.sdk.net.http.bean.HttpResponseParam;
@@ -10,8 +11,11 @@ import com.momix.sdk.weixin.mp.api.WxMpConfig;
 import com.momix.sdk.weixin.mp.api.WxMpService;
 import com.momix.sdk.weixin.mp.bean.WxAccessToken;
 import com.momix.sdk.weixin.mp.bean.WxJsapiSignature;
+import com.momix.sdk.weixin.mp.bean.WxMenu;
 import com.momix.sdk.weixin.mp.commons.SignUtil;
 import com.momix.sdk.weixin.mp.commons.WxHttpUrl;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 
@@ -20,6 +24,8 @@ import java.io.IOException;
  * Created by rono on 2015/11/27.
  */
 public class WxMpServiceImpl implements WxMpService {
+    private static final Logger logger = LoggerFactory.getLogger(WxMpServiceImpl.class);
+
     private WxMpConfig wxMpConfig;
     /** 全局的是否正在刷新access token的 */
     protected final Object globalAccessTokenRefreshLock = new Object();
@@ -29,14 +35,14 @@ public class WxMpServiceImpl implements WxMpService {
     private MyHttp http;
 
     public WxMpServiceImpl() {
-        System.out.println("WxMpService init...");
+        logger.debug("WxMpService init...");
     }
 
     public WxMpServiceImpl(MyHttp http, WxMpConfig wxMpConfig) {
         this.http = http;
         this.wxMpConfig = wxMpConfig;
     }
-
+    // region 验证信息
     @Override
     public boolean checkSignature(String signature,String timestamp, String nonce) {
         try{
@@ -96,6 +102,17 @@ public class WxMpServiceImpl implements WxMpService {
     public WxJsapiSignature createJsapiSignature(String url) throws SdkException {
         return null;
     }
+    // endregion
+
+    // region 菜单信息
+    @Override
+    public void menuCreate(WxMenu wxMenu) throws SdkException {
+        String url = WxHttpUrl.MENU_CREATE(wxMpConfig.getAccessToken());
+
+    }
+
+    // endregion
+
 
     public WxMpConfig getWxMpConfig() {
         return wxMpConfig;

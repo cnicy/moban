@@ -42,6 +42,13 @@ public class WxMpMessageRouter {
     // 路由规则列表
     private List<WxMpMessageRouterRule> rulesList = new ArrayList<WxMpMessageRouterRule>();
 
+    /**
+     * 配置路由规则时要按照从细到粗的原则，否则可能消息可能会被提前处理
+     * @return
+     */
+    public WxMpMessageRouterRule buildRule(){
+        return new WxMpMessageRouterRule(this);
+    }
 
     public WxMpOutMessage route(final WxMpMessage wxMpMessage){
         if(isCheckMessageDeplicate && wxMessageDuplicateChecker.isDuplicate(wxMpMessage)){
@@ -88,5 +95,37 @@ public class WxMpMessageRouter {
      */
     public void addMessageRouterRule(WxMpMessageRouterRule rule){
         this.rulesList.add(rule);
+    }
+
+    public WxMpService getWxMpService() {
+        return wxMpService;
+    }
+
+    public void setWxMpService(WxMpService wxMpService) {
+        this.wxMpService = wxMpService;
+    }
+
+    public WxSessionManager getWxSessionManager() {
+        return wxSessionManager;
+    }
+
+    public void setWxSessionManager(WxSessionManager wxSessionManager) {
+        this.wxSessionManager = wxSessionManager;
+    }
+
+    public WxExceptionHandler getWxExceptionHandler() {
+        return wxExceptionHandler;
+    }
+
+    public void setWxExceptionHandler(WxExceptionHandler wxExceptionHandler) {
+        this.wxExceptionHandler = wxExceptionHandler;
+    }
+
+    public WxMessageDuplicateChecker getWxMessageDuplicateChecker() {
+        return wxMessageDuplicateChecker;
+    }
+
+    public void setWxMessageDuplicateChecker(WxMessageDuplicateChecker wxMessageDuplicateChecker) {
+        this.wxMessageDuplicateChecker = wxMessageDuplicateChecker;
     }
 }

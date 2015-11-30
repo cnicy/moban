@@ -32,7 +32,7 @@ public class WxMpMessageRouterRule implements Serializable{
 
     private boolean hasNextFlag = false; // 当前路由规则完成之后 是否还有下一条路由规则
     // 当前路由相关的处理器
-    private List<WxMpMessageHandler> handlers = new ArrayList<WxMpMessageHandler>();
+    private List<WxMpMessageHandler> handlerList = new ArrayList<WxMpMessageHandler>();
     // 当前路由相关的拦截器
     private List<WxMessageInterceptor> interceptors = new ArrayList<WxMessageInterceptor>();
 
@@ -42,7 +42,7 @@ public class WxMpMessageRouterRule implements Serializable{
     }
 
     /**
-     * 验证当前传进来的消息是否匹配当前规则
+     * 验证当前传进来的消息是否匹配当前规则,配置路由规则时要按照从细到粗的原则，否则可能消息可能会被提前处理
      * @param wxMpMessage
      * @return
      */
@@ -74,7 +74,7 @@ public class WxMpMessageRouterRule implements Serializable{
             }
             // 消息经过handler处理
             WxMpOutMessage res = null;
-            for(WxMpMessageHandler handler:handlers){
+            for(WxMpMessageHandler handler:handlerList){
                 res = handler.handler(wxMpMessage,context,wxMpService,wxSessionManager); // 返回最后handler的结果
             }
             return res;
@@ -117,6 +117,55 @@ public class WxMpMessageRouterRule implements Serializable{
     }
 
     /**
+     * 消息类型
+     * @param msgType
+     * @return
+     */
+    public WxMpMessageRouterRule msgType(String msgType){
+        this.msgType =msgType;
+        return this;
+    }
+
+    /**
+     * 事件类型
+     * @param event
+     * @return
+     */
+    public WxMpMessageRouterRule event(String event){
+        this.event = event;
+        return this;
+    }
+
+    /**
+     * 事件key
+     * @param eventKey
+     * @return
+     */
+    public WxMpMessageRouterRule eventKey(String eventKey){
+        this.eventKey = eventKey;
+        return this;
+    }
+
+    /**
+     * 内容
+     * @param content
+     * @return
+     */
+    public WxMpMessageRouterRule content(String content){
+        this.content = content;
+        return this;
+    }
+
+    public WxMpMessageRouterRule handler(WxMpMessageHandler... handlers){
+        for(WxMpMessageHandler handler:handlers){
+            if(null!=handler)
+                handlerList.add(handler);
+        }
+        return this;
+    }
+
+
+    /**
      * 设置拦截器
      * @param wxMessageInterceptors
      * @return
@@ -138,10 +187,6 @@ public class WxMpMessageRouterRule implements Serializable{
 
     public boolean isAsync() {
         return async;
-    }
-
-    public void setAsync(boolean async) {
-        this.async = async;
     }
 
     public String getMsgType() {
