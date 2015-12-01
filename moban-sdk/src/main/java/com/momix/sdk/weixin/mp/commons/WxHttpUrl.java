@@ -15,12 +15,20 @@ public class WxHttpUrl {
     protected static final String menu_get     = "https://api.weixin.qq.com/cgi-bin/menu/get?access_token=%s";
     // endregion
 
+    // region 账号管理
+    protected static final String qrcode_create = "https://api.weixin.qq.com/cgi-bin/qrcode/create?access_token=%s";
+    // endregion
+
+    // region 用户管理
+    protected static final String oauth_access_toen = "https://api.weixin.qq.com/sns/oauth2/access_token?appid=%s&secret=%s&code=%s&grant_type=authorization_code";
+    // endregion
+
     /** 获取access_token url*/
     public static String ACCESS_TOKEN(final String appId,final String appSecret){
         return String.format(access_token,appId,appSecret);
     }
 
-    // region
+    // region 菜单
     /** 菜单创建*/
     public static String MENU_CREATE(final String access_token){
         return String.format(menu_create,access_token);
@@ -32,6 +40,18 @@ public class WxHttpUrl {
     /** 获取菜单*/
     public static String MENU_GETLALL(final String access_token){
         return String.format(menu_get,access_token);
+    }
+    // endregion
+
+    // region 账号管理
+    public static String QRCODE_CREATE(final String access_token){
+        return String.format(qrcode_create,access_token);
+    }
+    // endregion
+
+    // region 用户管理
+    public static String OAUTH_ACCESS_TOKEN(final String appId,final String secret,final String code){
+        return String.format(oauth_access_toen,appId,secret,code);
     }
     // endregion
 }

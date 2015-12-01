@@ -10,9 +10,7 @@ import com.momix.sdk.parser.api.Parser;
 import com.momix.sdk.parser.json.JsonParser;
 import com.momix.sdk.weixin.mp.api.WxMpConfig;
 import com.momix.sdk.weixin.mp.api.WxMpService;
-import com.momix.sdk.weixin.mp.bean.WxAccessToken;
-import com.momix.sdk.weixin.mp.bean.WxJsapiSignature;
-import com.momix.sdk.weixin.mp.bean.WxMenu;
+import com.momix.sdk.weixin.mp.bean.*;
 import com.momix.sdk.weixin.mp.commons.SignUtil;
 import com.momix.sdk.weixin.mp.commons.WxHttpUrl;
 import org.slf4j.Logger;
@@ -116,7 +114,7 @@ public class WxMpServiceImpl implements WxMpService {
     public void menuCreate(WxMenu wxMenu) throws SdkException {
         try {
             String url = WxHttpUrl.MENU_CREATE(getAccessToken());
-            post(url,wxMenu,wxMenu.getClass(),jsonParser);
+            post(url, wxMenu, wxMenu.getClass(), jsonParser);
         } catch (SdkException e) {
             throw new RuntimeException(e);
         } catch (IOException e) {
@@ -128,7 +126,7 @@ public class WxMpServiceImpl implements WxMpService {
     public void menuDelete() throws SdkException {
         try {
             String url = WxHttpUrl.MENU_DELETE(getAccessToken());
-            get(url,null,jsonParser);
+            get(url, null, jsonParser);
         } catch (SdkException e) {
             throw new RuntimeException(e);
         } catch (IOException e) {
@@ -140,8 +138,22 @@ public class WxMpServiceImpl implements WxMpService {
     public WxMenu menuGetAll() throws SdkException {
         try {
             String url = WxHttpUrl.MENU_GETLALL(getAccessToken());
-            WxMenu menu = get(url,null,jsonParser);
-            return menu;
+            return get(url, WxMenu.class, jsonParser);
+        } catch (SdkException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+    // endregion
+
+    // region   账号管理
+    @Override
+    public QrcodeTicket qrcodeCreate(Qrcode qrcode) throws SdkException {
+        try {
+            String url = WxHttpUrl.QRCODE_CREATE(getAccessToken());
+            return post(url,qrcode,QrcodeTicket.class,jsonParser);
         } catch (SdkException e) {
             throw new RuntimeException(e);
         } catch (IOException e) {
@@ -150,6 +162,27 @@ public class WxMpServiceImpl implements WxMpService {
         return null;
     }
 
+    // endregion
+
+    // region 用户管理
+
+    /**
+     * 网页授权中的access_token，时间很短，最好是每次都重新获取,网页授权中的access_token，不能复用
+     * @param code
+     * @return
+     */
+    @Override
+    public OauthAccessToken oauthAccessToken(String code) {
+        try {
+            String url = WxHttpUrl.OAUTH_ACCESS_TOKEN(wxMpConfig.getAppId(),wxMpConfig.getSecret(),code);
+            return get(url,OauthAccessToken.class,jsonParser);
+        } catch (SdkException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
     // endregion
 
     // region 微信网络请求
@@ -173,7 +206,7 @@ public class WxMpServiceImpl implements WxMpService {
         return null;
     }
 
-    public <T> T get(String url,T res, Parser parser) throws SdkException, IOException {
+    public <T> T get(String url,Class<T> res, Parser parser) throws SdkException, IOException {
         HttpRequestParams params = new HttpRequestParams();
         params.setUri(url);
         HttpResponseParam resParams = sdkHttp.get(params);

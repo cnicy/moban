@@ -10,6 +10,8 @@ import com.momix.sdk.weixin.mp.api.*;
 import com.momix.sdk.weixin.mp.api.impl.WxMessageInMemoryDuplicateChecker;
 import com.momix.sdk.weixin.mp.api.impl.WxMpConfigInMemory;
 import com.momix.sdk.weixin.mp.api.impl.WxMpServiceImpl;
+import com.momix.sdk.weixin.mp.bean.Qrcode;
+import com.momix.sdk.weixin.mp.bean.QrcodeTicket;
 import com.momix.sdk.weixin.mp.bean.WxMenu;
 import com.momix.sdk.weixin.mp.bean.WxMpMessage;
 import com.momix.sdk.weixin.mp.commons.WxConsts;
@@ -19,7 +21,33 @@ import com.momix.sdk.weixin.mp.commons.WxConsts;
  */
 public class WeiXinTest {
     public static void main(String[] args) throws SdkException {
-        test2();
+        testQrcode();
+    }
+
+    public static void testQrcode() throws SdkException {
+        WxMpConfig config = new WxMpConfigInMemory();
+        config.setAppId("wx44ae247ca0e9ace2");
+        config.setSecret("107f66f6ef35d7273e348d41c9765128");
+        config.setToken("59cc6b8faab59a224fbfa26243f5c8e8");
+
+        SdkHttp http = new SdkHttpURLConnection();
+        Parser jsonParser = new JsonParser();
+        WxMpService wxService = new WxMpServiceImpl(http,config,jsonParser,null);
+
+        Qrcode qrcode = new Qrcode();
+        qrcode.setAction_name("QR_LIMIT_SCENE");
+
+        Qrcode.ActionInfo actionInfo = new Qrcode.ActionInfo();
+        qrcode.setAction_info(actionInfo);
+
+        Qrcode.ActionInfo.Sence sence = new Qrcode.ActionInfo.Sence();
+        sence.setScene_id(10086);
+        // sence.setScene_str("sence-str");
+
+        actionInfo.setScene(sence);
+
+        QrcodeTicket ticket =  wxService.qrcodeCreate(qrcode);
+        System.out.println(new JsonParser().to(ticket));
     }
 
     public static void test(){
@@ -51,12 +79,12 @@ public class WeiXinTest {
         router.setWxMessageDuplicateChecker(checker);
 
 
-        router.buildRule().msgType(WxConsts.XML_MSG_EVENT).handler(textHanlder).end();
-                //.buildRule().msgType(WxConsts.XML_MSG_TEXT).event(WxConsts.EVT_UNSUBSCRIBE).handler(textHanlder).end();
+        router.buildRule().msgType(WxConsts.XML_MSG_EVENT).event(WxConsts.EVT_UNSUBSCRIBE).async(false).handler(textHanlder).next()
+              .buildRule().msgType(WxConsts.XML_MSG_EVENT).event(WxConsts.EVT_SUBSCRIBE).handler(textHanlder).end();
 
-        String s = "<xml><ToUserName><![CDATA[gh_a4473d322004]]></ToUserName><FromUserName><![CDATA[ocSa0uHlO4eiuQ_dwg3b8Zkdcr4Q]]></FromUserName><CreateTime>1448965608</CreateTime><MsgType><![CDATA[event]]></MsgType><Event><![CDATA[unsubscribe]]></Event><EventKey><![CDATA[]]></EventKey></xml>";
-        WxMpMessage msg =  new XmlParser().from(s,WxMpMessage.class);
-        router.route(msg);
+       // String s = "<xml><ToUserName><![CDATA[gh_a4473d322004]]></ToUserName><FromUserName><![CDATA[ocSa0uHlO4eiuQ_dwg3b8Zkdcr4Q]]></FromUserName><CreateTime>1448965608</CreateTime><MsgType><![CDATA[event]]></MsgType><Event><![CDATA[unsubscribe]]></Event><EventKey><![CDATA[]]></EventKey></xml>";
+       // WxMpMessage msg =  new XmlParser().from(s,WxMpMessage.class);
+        //router.route(msg);
     }
 
     public static void test1(){
