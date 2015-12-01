@@ -1,5 +1,7 @@
 package com.momix.sdk.weixin.mp.bean;
 
+import com.momix.sdk.parser.api.XmlAttribute;
+
 import java.io.Serializable;
 
 /**
@@ -7,94 +9,77 @@ import java.io.Serializable;
  * Created by rono on 2015/11/29.
  */
 public class WxMpMessage implements Serializable{
-    private String ToUserName;
-    private String FromUserName;
-    private Long CreateTime;
-    private String MsgType;
-    private String PicUrl;
-    private Long MediaId;
-    private Long MsgId;
-    private String Event;
-    private String EventKey;
-    private String Content;
+    //*** 开发者微信号
+    @XmlAttribute(name="ToUserName")
+    private String toUserName;
+    //*** 发送方帐号（一个OpenID）
+    @XmlAttribute(name="FromUserName")
+    private String fromUserName;
+    //** 创建时间
+    @XmlAttribute(name="CreateTime")
+    private String createTime;
+    //** 消息类型
+    @XmlAttribute(name="MsgType")
+    private String msgType;
+    //** 内容
+    @XmlAttribute(name="Content")
+    private String content;
+    //** 消息ID
+    @XmlAttribute(name="MsgId")
+    private String msgId;
+    //** 事件类型
+    @XmlAttribute(name="Event")
+    private String event;
+    // 事件key
+    @XmlAttribute(name="EventKey")
+    private String eventKey;
 
     public String getToUserName() {
-        return ToUserName;
+        return toUserName;
     }
-
     public void setToUserName(String toUserName) {
-        ToUserName = toUserName;
+        this.toUserName = toUserName;
     }
-
     public String getFromUserName() {
-        return FromUserName;
+        return fromUserName;
     }
-
     public void setFromUserName(String fromUserName) {
-        FromUserName = fromUserName;
+        this.fromUserName = fromUserName;
     }
-
-    public Long getCreateTime() {
-        return CreateTime;
+    public String getCreateTime() {
+        return createTime;
     }
-
-    public void setCreateTime(Long createTime) {
-        CreateTime = createTime;
+    public void setCreateTime(String createTime) {
+        this.createTime = createTime;
     }
-
     public String getMsgType() {
-        return MsgType;
+        return msgType;
     }
-
     public void setMsgType(String msgType) {
-        MsgType = msgType;
+        this.msgType = msgType;
     }
-
-    public String getPicUrl() {
-        return PicUrl;
-    }
-
-    public void setPicUrl(String picUrl) {
-        PicUrl = picUrl;
-    }
-
-    public Long getMediaId() {
-        return MediaId;
-    }
-
-    public void setMediaId(Long mediaId) {
-        MediaId = mediaId;
-    }
-
-    public Long getMsgId() {
-        return MsgId;
-    }
-
-    public void setMsgId(Long msgId) {
-        MsgId = msgId;
-    }
-
-    public String getEvent() {
-        return Event;
-    }
-
-    public void setEvent(String event) {
-        Event = event;
-    }
-
-    public String getEventKey() {
-        return EventKey;
-    }
-
-    public void setEventKey(String eventKey) {
-        EventKey = eventKey;
-    }
-
     public String getContent() {
-        return Content;
+        return content;
     }
-
     public void setContent(String content) {
-        Content = content;
+        this.content = content;
+    }
+    public String getMsgId() {
+        return msgId;
+    }
+    public void setMsgId(String msgId) {
+        this.msgId = msgId;
+    }
+    public String getEvent() {
+        return event;
+    }
+    public void setEvent(String event) {
+        this.event = event;
+    }
+    public String getEventKey() {
+        return eventKey;
+    }
+    public void setEventKey(String eventKey) {
+        this.eventKey = eventKey;
     }
 }

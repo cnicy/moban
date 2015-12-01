@@ -34,4 +34,10 @@ public class SdkException extends Exception{
     public void setSdkError(SdkError sdkError) {
         this.sdkError = sdkError;
     }
+
+    public String toString(){
+        if(null!=sdkError)
+            return sdkError.toString();
+        return null;
+    }
 }

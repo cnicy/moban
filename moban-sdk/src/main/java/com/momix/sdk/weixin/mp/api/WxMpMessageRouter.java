@@ -42,6 +42,10 @@ public class WxMpMessageRouter {
     // 路由规则列表
     private List<WxMpMessageRouterRule> rulesList = new ArrayList<WxMpMessageRouterRule>();
 
+    public WxMpMessageRouter() {
+        System.out.println("(*^__^*) ……>>>>>>>>>>>>>>>>>>>>>>>>> WxMpMessageRouter init...............");
+    }
+
     /**
      * 配置路由规则时要按照从细到粗的原则，否则可能消息可能会被提前处理
      * @return

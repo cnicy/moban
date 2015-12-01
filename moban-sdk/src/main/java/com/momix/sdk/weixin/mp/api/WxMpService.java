@@ -76,6 +76,17 @@ public interface WxMpService {
      */
     public void menuCreate(WxMenu wxMenu)throws SdkException;
 
+    /**
+     * 删除菜单
+     * @throws SdkException
+     */
+    public void menuDelete()throws SdkException;
 
+    /**
+     * 获取我的微信菜单
+     * @return
+     * @throws SdkException
+     */
+    public WxMenu menuGetAll()throws SdkException;
     // endregion
 }

@@ -14,7 +14,7 @@ public class WxMpConfigInMemory implements WxMpConfig{
     protected  volatile String token;
 
     public WxMpConfigInMemory() {
-        System.out.println("WxMpConfigInMemory init......");
+        System.out.println("(*^__^*) ……>>>>>>>>>>>>>>>>>>>>>>>>> WxMpConfigInMemory init...............");
     }
 
     @Override

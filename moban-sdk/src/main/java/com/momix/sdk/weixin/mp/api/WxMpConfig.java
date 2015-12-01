@@ -72,6 +72,17 @@ public interface WxMpConfig {
     public void setAppId(String appId);
 
     /**
+     * 获取微信公众号中设置的 token
+     * @return
+     */
+    public String getToken();
+
+    /**
+     * 设置token
+     * @param token
+     */
+    public void setToken(String token);
+    /**
      * 设置appsecret
      * @return
      */

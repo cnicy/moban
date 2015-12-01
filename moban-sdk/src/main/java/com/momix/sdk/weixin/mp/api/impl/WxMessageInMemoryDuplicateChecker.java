@@ -15,6 +15,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * Created by rono on 2015/11/29.
  */
 public class WxMessageInMemoryDuplicateChecker implements WxMessageDuplicateChecker{
+
     /**
      * 一个消息ID在内存的过期时间：15秒
      */
@@ -45,6 +46,7 @@ public class WxMessageInMemoryDuplicateChecker implements WxMessageDuplicateChec
     public WxMessageInMemoryDuplicateChecker() {
         this.timeToLive = 15 * 1000L;
         this.clearPeriod = 5 * 1000L;
+        System.out.println("(*^__^*) ……>>>>>>>>>>>>>>>>>>>>>>>>> WxMessageInMemoryDuplicateChecker init...............");
     }
 
     /**
@@ -69,6 +71,7 @@ public class WxMessageInMemoryDuplicateChecker implements WxMessageDuplicateChec
             // 第一次接收到这个消息
             return false;
         }
+        System.out.println(messageId+" is duplicate");
         return true;
     }
 
@@ -85,7 +88,6 @@ public class WxMessageInMemoryDuplicateChecker implements WxMessageDuplicateChec
         }else{
             messageId =String.valueOf(wxMpMessage.getMsgId());
         }
-        System.out.println("msgId=" + messageId);
         return isDuplicate(messageId);
     }
 
@@ -108,6 +110,7 @@ public class WxMessageInMemoryDuplicateChecker implements WxMessageDuplicateChec
                         for (Map.Entry<String, Long> entry : msgId2Timestamp.entrySet()) {
                             if (now - entry.getValue() > timeToLive) {
                                 msgId2Timestamp.entrySet().remove(entry);
+                                System.out.println("remove msgId "+entry+ " size "+msgId2Timestamp.size());
                             }
                         }
                     }

@@ -39,6 +39,7 @@ public class WxMpMessageRouterRule implements Serializable{
     // 持有一个router实例，方便向router添加路由规则
     public WxMpMessageRouterRule(WxMpMessageRouter wxMpMessageRouter) {
         this.wxMpMessageRouter = wxMpMessageRouter;
+        System.out.println("(*^__^*) ……>>>>>>>>>>>>>>>>>>>>>>>>> WxMpMessageRouterRule init...............");
     }
 
     /**

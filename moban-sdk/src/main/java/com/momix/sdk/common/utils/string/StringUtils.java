@@ -2,6 +2,7 @@ package com.momix.sdk.common.utils.string;
 
 import com.momix.sdk.common.constants.Constants;
 
+import java.io.*;
 import java.text.NumberFormat;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -147,5 +148,53 @@ public abstract class StringUtils {
 	    }
 	    m.appendTail(sb);
 	    return sb.toString();
+	}
+
+	/**
+	 * 替换http参数信息
+	 * @param url
+	 * @param name
+	 * @param value
+	 * @return
+	 */
+	public static String replaceHttpParams(String url, String name, String value) {
+		if(null!=url && null!=value){
+			url = url.replaceAll("(" + name +"=[^&]*)", name + "=" + value);
+		}
+		return url;
+	}
+
+	public static String replaceUrl(String url, String name, String value) {
+		if(CommonUtil.isNotEmpty(url,name,value)) {
+			int index = url.indexOf(name + "=");
+			if(index != -1) {
+				StringBuilder sb = new StringBuilder();
+				sb.append(url.substring(0, index)).append(name + "=")
+						.append(value);
+				int idx = url.indexOf("&", index);
+				if(idx != -1) {
+					sb.append(url.substring(idx));
+				}
+				url = sb.toString();
+			}
+		}
+		return url;
+	}
+
+	public static String readerStringFromStream(InputStream is) throws IOException {
+		InputStreamReader isr =null;
+		try{
+			isr = new InputStreamReader(is, "utf-8");
+			BufferedReader in = new BufferedReader(isr);
+			StringBuffer sb = new StringBuffer();
+			String line = "";
+			while ((line = in.readLine()) != null) {
+				sb.append(line);
+			}
+			return sb.toString();
+		}finally{
+			isr.close();
+			is.close();
+		}
 	}
 }

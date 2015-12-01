@@ -4,6 +4,14 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 public class SignUtil {
+    public static void main(String[] args) {
+        String timestamp ="1448962377";
+        String nonce = "1169445664";
+        String token = "59cc6b8faab59a224fbfa26243f5c8e8";
+        String sign  = "26b5a3ea3c8efbc63678ffba0dbfb61743dbc2c9";
+
+        System.out.println(checkSignature(token,sign,timestamp,nonce));
+    }
     /**
      * 验证签名
      * @param token

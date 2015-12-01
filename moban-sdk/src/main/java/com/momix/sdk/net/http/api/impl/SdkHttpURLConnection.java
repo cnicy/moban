@@ -1,6 +1,6 @@
 package com.momix.sdk.net.http.api.impl;
 
-import com.momix.sdk.net.http.api.MyHttp;
+import com.momix.sdk.net.http.api.SdkHttp;
 import com.momix.sdk.net.http.bean.HttpRequestParams;
 import com.momix.sdk.net.http.bean.HttpResponseParam;
 
@@ -16,8 +16,8 @@ import java.util.Map;
  * HttpURLConnection 默认实现
  * Created by rono on 2015/11/27.
  */
-public class MyHttpURLConnection implements MyHttp{
-    public MyHttpURLConnection() {
+public class SdkHttpURLConnection implements SdkHttp {
+    public SdkHttpURLConnection() {
         System.out.println("http init......");
     }
 

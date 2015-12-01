@@ -38,4 +38,12 @@ public class SdkError implements Serializable{
     public void setErrmsg(String errmsg) {
         this.errmsg = errmsg;
     }
+
+    @Override
+    public String toString() {
+        return "SdkError{" +
+                "errcode=" + errcode +
+                ", errmsg='" + errmsg + '\'' +
+                '}';
+    }
 }

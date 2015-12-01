@@ -3,9 +3,10 @@ package com.momix.sdk.weixin.mp.api.impl;
 import com.momix.sdk.common.exception.SdkError;
 import com.momix.sdk.common.exception.SdkException;
 import com.momix.sdk.common.utils.string.StringUtils;
-import com.momix.sdk.net.http.api.MyHttp;
+import com.momix.sdk.net.http.api.SdkHttp;
 import com.momix.sdk.net.http.bean.HttpRequestParams;
 import com.momix.sdk.net.http.bean.HttpResponseParam;
+import com.momix.sdk.parser.api.Parser;
 import com.momix.sdk.parser.json.JsonParser;
 import com.momix.sdk.weixin.mp.api.WxMpConfig;
 import com.momix.sdk.weixin.mp.api.WxMpService;
@@ -32,21 +33,27 @@ public class WxMpServiceImpl implements WxMpService {
     /** 全局的是否正在刷新jsapi_ticket的锁 */
     protected final Object globalJsapiTicketRefreshLock = new Object();
     /**网络请求*/
-    private MyHttp http;
+    private SdkHttp sdkHttp;
+    /** json转换器*/
+    private Parser jsonParser;
+    /** xml转换器*/
+    private Parser xmlParser;
 
     public WxMpServiceImpl() {
-        logger.debug("WxMpService init...");
+        System.out.println("(*^__^*) ……>>>>>>>>>>>>>>>>>>>>>>>>> WxMpServiceImpl init...............");
     }
 
-    public WxMpServiceImpl(MyHttp http, WxMpConfig wxMpConfig) {
-        this.http = http;
+    public WxMpServiceImpl(SdkHttp http, WxMpConfig wxMpConfig,Parser jsonParser,Parser xmlParser) {
+        this.sdkHttp = http;
         this.wxMpConfig = wxMpConfig;
+        this.jsonParser = jsonParser;
+        this.xmlParser = xmlParser;
     }
     // region 验证信息
     @Override
-    public boolean checkSignature(String signature,String timestamp, String nonce) {
+    public boolean checkSignature(String timestamp, String nonce, String signature) {
         try{
-            return SignUtil.checkSignature(wxMpConfig.getAccessToken(),signature,timestamp,nonce);
+            return SignUtil.checkSignature(wxMpConfig.getToken(), signature, timestamp, nonce);
         }catch (Exception e){
             return false;
         }
@@ -69,7 +76,7 @@ public class WxMpServiceImpl implements WxMpService {
                         String url = WxHttpUrl.ACCESS_TOKEN(wxMpConfig.getAppId(),wxMpConfig.getSecret());
                         HttpRequestParams req = new HttpRequestParams();
                         req.setUri(url);
-                        HttpResponseParam res = http.get(req);
+                        HttpResponseParam res = sdkHttp.get(req);
 
                         SdkError error = new JsonParser().from(res.getContent(),SdkError.class);
                         if(null!=error && error.getErrcode() !=0){
@@ -107,12 +114,84 @@ public class WxMpServiceImpl implements WxMpService {
     // region 菜单信息
     @Override
     public void menuCreate(WxMenu wxMenu) throws SdkException {
-        String url = WxHttpUrl.MENU_CREATE(wxMpConfig.getAccessToken());
+        try {
+            String url = WxHttpUrl.MENU_CREATE(getAccessToken());
+            post(url,wxMenu,wxMenu.getClass(),jsonParser);
+        } catch (SdkException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
+    @Override
+    public void menuDelete() throws SdkException {
+        try {
+            String url = WxHttpUrl.MENU_DELETE(getAccessToken());
+            get(url,null,jsonParser);
+        } catch (SdkException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public WxMenu menuGetAll() throws SdkException {
+        try {
+            String url = WxHttpUrl.MENU_GETLALL(getAccessToken());
+            WxMenu menu = get(url,null,jsonParser);
+            return menu;
+        } catch (SdkException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     // endregion
 
+    // region 微信网络请求
+    public <T, E> T post(String url, E req, Class<T> res, Parser parser) throws SdkException, IOException {
+        HttpRequestParams params = new HttpRequestParams();
+        params.setUri(url);
+        params.setRequestParams(parser.to(req));
+        HttpResponseParam resParams = sdkHttp.post(params);
+        SdkError sdkError = parser.from(resParams.getContent(), SdkError.class);
+        if(null!=sdkError && sdkError.getErrcode() !=0){
+            // token 过期
+            if (sdkError.getErrcode() == 42001 || sdkError.getErrcode() == 40001) {
+                String access_token =  getAccessToken(true);
+                url = StringUtils.replaceHttpParams(url, "access_token", access_token);
+                return post(url,req,res,parser);
+            }
+            throw new SdkException(sdkError);
+        }else if(null!=resParams.getContent()){
+            return (T)parser.from(resParams.getContent(),res);
+        }
+        return null;
+    }
+
+    public <T> T get(String url,T res, Parser parser) throws SdkException, IOException {
+        HttpRequestParams params = new HttpRequestParams();
+        params.setUri(url);
+        HttpResponseParam resParams = sdkHttp.get(params);
+        SdkError sdkError = parser.from(resParams.getContent(), SdkError.class);
+        if(null!=sdkError && sdkError.getErrcode() !=0){
+            // token 过期
+            if (sdkError.getErrcode() == 42001 || sdkError.getErrcode() == 40001) {
+                String access_token =  getAccessToken(true);
+                url = StringUtils.replaceHttpParams(url, "access_token", access_token);
+                return get(url, res, parser);
+            }
+            throw new SdkException(sdkError);
+        }else if(null!=resParams.getContent() && null!=res){
+            return (T)parser.from(resParams.getContent(),res.getClass());
+        }
+        return null;
+    }
+    // endregion
 
     public WxMpConfig getWxMpConfig() {
         return wxMpConfig;
@@ -122,13 +201,27 @@ public class WxMpServiceImpl implements WxMpService {
         this.wxMpConfig = wxMpConfig;
     }
 
-    public MyHttp getHttp() {
-        return http;
+    public SdkHttp getSdkHttp() {
+        return sdkHttp;
     }
 
-    public void setHttp(MyHttp http) {
-        this.http = http;
+    public void setSdkHttp(SdkHttp sdkHttp) {
+        this.sdkHttp = sdkHttp;
     }
 
+    public Parser getJsonParser() {
+        return jsonParser;
+    }
 
+    public void setJsonParser(Parser jsonParser) {
+        this.jsonParser = jsonParser;
+    }
+
+    public Parser getXmlParser() {
+        return xmlParser;
+    }
+
+    public void setXmlParser(Parser xmlParser) {
+        this.xmlParser = xmlParser;
+    }
 }

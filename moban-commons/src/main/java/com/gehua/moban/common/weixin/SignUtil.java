@@ -5,7 +5,7 @@ import java.security.NoSuchAlgorithmException;
 
 public class SignUtil {
     // 与接口配置信息中的Token要一致
-    private static String token = "Javen";
+    private static String token = "59cc6b8faab59a224fbfa26243f5c8e8";
 
     /**
      * 验证签名
