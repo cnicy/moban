@@ -6,7 +6,7 @@ import java.io.Serializable;
  * 二维码返回参数
  * Created by rono on 2015/12/1.
  */
-public class QrcodeTicket implements Serializable {
+public class WxQrcodeTicket implements Serializable {
     private String ticket;
     private Integer expire_seconds;
     private String url;

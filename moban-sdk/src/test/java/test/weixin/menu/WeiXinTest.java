@@ -1,4 +1,4 @@
-package test;
+package test.weixin.menu;
 
 import com.momix.sdk.common.exception.SdkException;
 import com.momix.sdk.net.http.api.SdkHttp;
@@ -10,18 +10,25 @@ import com.momix.sdk.weixin.mp.api.*;
 import com.momix.sdk.weixin.mp.api.impl.WxMessageInMemoryDuplicateChecker;
 import com.momix.sdk.weixin.mp.api.impl.WxMpConfigInMemory;
 import com.momix.sdk.weixin.mp.api.impl.WxMpServiceImpl;
-import com.momix.sdk.weixin.mp.bean.Qrcode;
-import com.momix.sdk.weixin.mp.bean.QrcodeTicket;
-import com.momix.sdk.weixin.mp.bean.WxMenu;
-import com.momix.sdk.weixin.mp.bean.WxMpMessage;
-import com.momix.sdk.weixin.mp.commons.WxConsts;
+import com.momix.sdk.weixin.mp.bean.*;
 
 /**
  * Created by rono on 2015/11/30.
  */
 public class WeiXinTest {
     public static void main(String[] args) throws SdkException {
-        testQrcode();
+        WxOauthAccessToken tokean = test123(WxOauthAccessToken.class);
+        System.out.println(tokean.getOpenid());
+    }
+
+    public static <T> T test123(Class<T> res){
+        String s= "{\"access_token\":\"OezXcEiiBSKSxW0eoylIeG6GQ5czNfAgrZVxdultRogtnblKDqXQLrC_-0VIkxLy3qkDigE6SM6eO16ykZ2iAMhMJxYDudvDP1yIjvpykfbNIeFyelul1muVUCcnlC0F-Q94n8r6F3e1lsmYZ4lXHg\",\"expires_in\":7200,\"refresh_token\":\"OezXcEiiBSKSxW0eoylIeG6GQ5czNfAgrZVxdultRogtnblKDqXQLrC_-0VIkxLysElq3GGcn4AIzrDefYbZybJvfLZ0bu5HpF3WhAqJGK7x04Z85SnkYYYipvkDfipQKSdpF-uX_1KGdGQLJph2gw\",\"openid\":\"oazO5uASD-Pii2Dl0fmXSJ2msUTI\",\"scope\":\"snsapi_base\"}";
+        try {
+            return (T)new JsonParser().from(s, WxOauthAccessToken.class);
+        } catch (SdkException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public static void testQrcode() throws SdkException {
@@ -34,19 +41,19 @@ public class WeiXinTest {
         Parser jsonParser = new JsonParser();
         WxMpService wxService = new WxMpServiceImpl(http,config,jsonParser,null);
 
-        Qrcode qrcode = new Qrcode();
+        WxQrcode qrcode = new WxQrcode();
         qrcode.setAction_name("QR_LIMIT_SCENE");
 
-        Qrcode.ActionInfo actionInfo = new Qrcode.ActionInfo();
+        WxQrcode.ActionInfo actionInfo = new WxQrcode.ActionInfo();
         qrcode.setAction_info(actionInfo);
 
-        Qrcode.ActionInfo.Sence sence = new Qrcode.ActionInfo.Sence();
+        WxQrcode.ActionInfo.Sence sence = new WxQrcode.ActionInfo.Sence();
         sence.setScene_id(10086);
         // sence.setScene_str("sence-str");
 
         actionInfo.setScene(sence);
 
-        QrcodeTicket ticket =  wxService.qrcodeCreate(qrcode);
+        WxQrcodeTicket ticket =  wxService.qrcodeCreate(qrcode);
         System.out.println(new JsonParser().to(ticket));
     }
 
@@ -77,14 +84,6 @@ public class WeiXinTest {
         WxMpMessageRouter router = new WxMpMessageRouter();
         router.setWxMpService(wxService);
         router.setWxMessageDuplicateChecker(checker);
-
-
-        router.buildRule().msgType(WxConsts.XML_MSG_EVENT).event(WxConsts.EVT_UNSUBSCRIBE).async(false).handler(textHanlder).next()
-              .buildRule().msgType(WxConsts.XML_MSG_EVENT).event(WxConsts.EVT_SUBSCRIBE).handler(textHanlder).end();
-
-       // String s = "<xml><ToUserName><![CDATA[gh_a4473d322004]]></ToUserName><FromUserName><![CDATA[ocSa0uHlO4eiuQ_dwg3b8Zkdcr4Q]]></FromUserName><CreateTime>1448965608</CreateTime><MsgType><![CDATA[event]]></MsgType><Event><![CDATA[unsubscribe]]></Event><EventKey><![CDATA[]]></EventKey></xml>";
-       // WxMpMessage msg =  new XmlParser().from(s,WxMpMessage.class);
-        //router.route(msg);
     }
 
     public static void test1(){
@@ -108,12 +107,12 @@ public class WeiXinTest {
         System.out.println(wxService.checkSignature(timestamp, nonce, sign));
         try {
 
-            WxMenu menu = new WxMenu();
-            WxMenu.WxButton btn = new WxMenu.WxButton();
-            btn.setName("name");
-            // wxService.menuCreate(menu);
-            WxMenu wxMenu =  wxService.menuGetAll();
-            System.out.println(wxMenu);
+//            WxMenu menu = new WxMenu();
+//            WxMenu.WxButton btn = new WxMenu.WxButton();
+//            btn.setName("name");
+//            // wxService.menuCreate(menu);
+//            WxMenu wxMenu =  wxService.menuGetAll();
+//            System.out.println(wxMenu);
 
 
 
@@ -124,6 +123,8 @@ public class WeiXinTest {
             router.buildRule().msgType("text").async(false).event("click").handler(textHanlder).end()
                     .buildRule().msgType("img").event("cl").async(false).handler(imgHandler).end()
                     .buildRule().msgType("img").event("click").async(false).handler(imgHandler).end();
+
+
 
             WxMpMessage msg = new WxMpMessage();
             msg.setMsgType("img");

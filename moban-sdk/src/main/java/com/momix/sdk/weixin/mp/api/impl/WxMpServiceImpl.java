@@ -150,10 +150,10 @@ public class WxMpServiceImpl implements WxMpService {
 
     // region   账号管理
     @Override
-    public QrcodeTicket qrcodeCreate(Qrcode qrcode) throws SdkException {
+    public WxQrcodeTicket qrcodeCreate(WxQrcode qrcode) throws SdkException {
         try {
             String url = WxHttpUrl.QRCODE_CREATE(getAccessToken());
-            return post(url,qrcode,QrcodeTicket.class,jsonParser);
+            return post(url,qrcode,WxQrcodeTicket.class,jsonParser);
         } catch (SdkException e) {
             throw new RuntimeException(e);
         } catch (IOException e) {
@@ -162,6 +162,21 @@ public class WxMpServiceImpl implements WxMpService {
         return null;
     }
 
+    // endregion
+
+    // region 消息管理
+    @Override
+    public void messageTemplateSend(WxMessageTemplate template) throws SdkException {
+
+        try {
+            String url = WxHttpUrl.MESSAGE_TEMPLATE(getAccessToken());
+            post(url,template,null,jsonParser);
+        } catch (SdkException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
     // endregion
 
     // region 用户管理
@@ -172,10 +187,10 @@ public class WxMpServiceImpl implements WxMpService {
      * @return
      */
     @Override
-    public OauthAccessToken oauthAccessToken(String code) {
+    public WxOauthAccessToken oauthAccessToken(String code) {
         try {
             String url = WxHttpUrl.OAUTH_ACCESS_TOKEN(wxMpConfig.getAppId(),wxMpConfig.getSecret(),code);
-            return get(url,OauthAccessToken.class,jsonParser);
+            return get(url,WxOauthAccessToken.class,jsonParser);
         } catch (SdkException e) {
             throw new RuntimeException(e);
         } catch (IOException e) {
@@ -184,6 +199,8 @@ public class WxMpServiceImpl implements WxMpService {
         return null;
     }
     // endregion
+
+
 
     // region 微信网络请求
     public <T, E> T post(String url, E req, Class<T> res, Parser parser) throws SdkException, IOException {
@@ -200,7 +217,7 @@ public class WxMpServiceImpl implements WxMpService {
                 return post(url,req,res,parser);
             }
             throw new SdkException(sdkError);
-        }else if(null!=resParams.getContent()){
+        }else if(null!=resParams.getContent() && null!=res){
             return (T)parser.from(resParams.getContent(),res);
         }
         return null;
@@ -220,7 +237,7 @@ public class WxMpServiceImpl implements WxMpService {
             }
             throw new SdkException(sdkError);
         }else if(null!=resParams.getContent() && null!=res){
-            return (T)parser.from(resParams.getContent(),res.getClass());
+            return (T)parser.from(resParams.getContent(),res);
         }
         return null;
     }

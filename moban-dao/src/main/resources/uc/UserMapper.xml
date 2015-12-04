@@ -9,5 +9,5 @@
 
 	<!--<select id="selectByPages" parameterType="User" resultMap="userResultMap">-->
 		<!--SELECT * FROM uc_user-->
-	<!--</select>-->
+	<!--<</select>-->
 </mapper>

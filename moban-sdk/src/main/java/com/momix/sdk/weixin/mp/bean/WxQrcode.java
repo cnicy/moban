@@ -8,7 +8,7 @@ import java.io.Serializable;
  * </pre>
  * Created by rono on 2015/12/1.
  */
-public class Qrcode implements Serializable {
+public class WxQrcode implements Serializable {
     /**该二维码有效时间，以秒为单位。 最大不超过604800（即7天）。*/
     private Integer expire_seconds;
     private String action_name;

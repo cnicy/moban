@@ -82,7 +82,7 @@ public class WxMpMessageRouter {
                 // TODO
             }
         }
-        return null;
+        return res;
     }
 
     /**

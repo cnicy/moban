@@ -1,4 +1,4 @@
-package test;
+package test.weixin.menu;
 
 import com.momix.sdk.common.exception.SdkException;
 import com.momix.sdk.weixin.mp.api.WxMpMessageHandler;
@@ -12,10 +12,10 @@ import java.util.Map;
 /**
  * Created by rono on 2015/11/30.
  */
-public class ImgMessageHandler implements WxMpMessageHandler {
+public class TextMessageHandler implements WxMpMessageHandler {
     @Override
     public WxMpOutMessage handler(WxMpMessage wxMpMessage, Map<String, Object> context, WxMpService wxMpService, WxSessionManager wxSessionManager) throws SdkException {
-        System.out.println("img text");
+        System.out.println("text handler");
         return null;
     }
 }

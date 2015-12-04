@@ -22,6 +22,7 @@
             <li><a href="#">基本内容</a></li>
         </ul>
     </div>
+
     <div class="rightinfo">
         <div class="tools">
             <ul class="toolbar">

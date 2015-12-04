@@ -10,6 +10,12 @@
         <!--<version>1.0</version>-->
     <!--</parent>-->
 
+    <parent>
+        <groupId>com.momix</groupId>
+        <artifactId>allin</artifactId>
+        <version>1.0</version>
+    </parent>
+
     <groupId>com.gehua.moban</groupId>
     <artifactId>moban</artifactId>
     <packaging>pom</packaging>

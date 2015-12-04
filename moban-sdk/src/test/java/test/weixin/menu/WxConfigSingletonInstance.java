@@ -1,4 +1,4 @@
-package test;
+package test.weixin.menu;
 
 import com.momix.sdk.weixin.mp.api.WxMpConfig;
 import com.momix.sdk.weixin.mp.api.impl.WxMpConfigInMemory;

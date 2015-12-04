@@ -23,6 +23,10 @@ public class WxHttpUrl {
     protected static final String oauth_access_toen = "https://api.weixin.qq.com/sns/oauth2/access_token?appid=%s&secret=%s&code=%s&grant_type=authorization_code";
     // endregion
 
+    // region 消息
+    protected  static final String message_template = "https://api.weixin.qq.com/cgi-bin/message/template/send?access_token=%s";
+    // endregion
+
     /** 获取access_token url*/
     public static String ACCESS_TOKEN(final String appId,final String appSecret){
         return String.format(access_token,appId,appSecret);
@@ -52,6 +56,12 @@ public class WxHttpUrl {
     // region 用户管理
     public static String OAUTH_ACCESS_TOKEN(final String appId,final String secret,final String code){
         return String.format(oauth_access_toen,appId,secret,code);
+    }
+    // endregion
+
+    // region 消息
+    public static String MESSAGE_TEMPLATE(final String access_token){
+        return String.format(message_template,access_token);
     }
     // endregion
 }

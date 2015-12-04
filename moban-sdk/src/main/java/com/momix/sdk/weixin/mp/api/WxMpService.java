@@ -73,20 +73,20 @@ public interface WxMpService {
      * @param wxMenu
      * @throws SdkException
      */
-    public void menuCreate(WxMenu wxMenu)throws SdkException;
+    void menuCreate(WxMenu wxMenu)throws SdkException;
 
     /**
      * 删除菜单
      * @throws SdkException
      */
-    public void menuDelete()throws SdkException;
+    void menuDelete()throws SdkException;
 
     /**
      * 获取我的微信菜单
      * @return
      * @throws SdkException
      */
-    public WxMenu menuGetAll()throws SdkException;
+    WxMenu menuGetAll()throws SdkException;
     // endregion
 
     // region 账号管理
@@ -96,11 +96,11 @@ public interface WxMpService {
      * @param qrcode
      * @throws SdkException
      */
-    public QrcodeTicket qrcodeCreate(Qrcode qrcode)throws SdkException;
+    WxQrcodeTicket qrcodeCreate(WxQrcode qrcode)throws SdkException;
     // endregion
 
     // region 发送消息
-   // public void messageTemplateSend();
+    void messageTemplateSend(WxMessageTemplate template)throws SdkException;
     // endregion
 
     // region 用户管理
@@ -113,6 +113,6 @@ public interface WxMpService {
      * @param code
      * @return
      */
-    OauthAccessToken oauthAccessToken(final String code);
+    WxOauthAccessToken oauthAccessToken(final String code);
     // endregion
 }

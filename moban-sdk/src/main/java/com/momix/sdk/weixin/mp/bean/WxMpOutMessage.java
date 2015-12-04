@@ -1,48 +1,61 @@
 package com.momix.sdk.weixin.mp.bean;
 
+import com.momix.sdk.parser.api.XmlAttribute;
+
 import java.io.Serializable;
 
 /**
  * Created by rono on 2015/11/29.
  */
 public class WxMpOutMessage implements Serializable{
-    protected String ToUserName;
-
-    protected String FromUserName;
-
-    protected Long CreateTime;
-
-    protected String MsgType;
+    @XmlAttribute(name="ToUserName")
+    protected String toUserName;
+    @XmlAttribute(name="FromUserName")
+    protected String fromUserName;
+    @XmlAttribute(name="CreateTime")
+    protected Long createTime;
+    @XmlAttribute(name="MsgType")
+    protected String msgType;
+    @XmlAttribute(name="Content")
+    protected String content;
 
     public String getToUserName() {
-        return ToUserName;
+        return toUserName;
     }
 
     public void setToUserName(String toUserName) {
-        ToUserName = toUserName;
+        this.toUserName = toUserName;
     }
 
     public String getFromUserName() {
-        return FromUserName;
+        return fromUserName;
     }
 
     public void setFromUserName(String fromUserName) {
-        FromUserName = fromUserName;
+        this.fromUserName = fromUserName;
     }
 
     public Long getCreateTime() {
-        return CreateTime;
+        return createTime;
     }
 
     public void setCreateTime(Long createTime) {
-        CreateTime = createTime;
+        this.createTime = createTime;
     }
 
     public String getMsgType() {
-        return MsgType;
+        return msgType;
     }
 
     public void setMsgType(String msgType) {
-        MsgType = msgType;
+        this.msgType = msgType;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
     }
 }

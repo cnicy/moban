@@ -5,7 +5,7 @@ import java.io.Serializable;
 /**
  * Created by rono on 2015/12/1.
  */
-public class OauthAccessToken implements Serializable{
+public class WxOauthAccessToken implements Serializable{
     /**网页授权中的access_token，时间很短，最好是每次都重新获取,网页授权中的access_token，不能复用*/
     private String access_token;
     private Integer expires_in;
