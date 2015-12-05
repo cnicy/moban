@@ -10,7 +10,11 @@ public class SignUtil {
         String token = "59cc6b8faab59a224fbfa26243f5c8e8";
         String sign  = "26b5a3ea3c8efbc63678ffba0dbfb61743dbc2c9";
 
-        System.out.println(checkSignature(token,sign,timestamp,nonce));
+
+        String s ="jsapi_ticket=sM4AOVdWfPE4DxkXGEs8VMCPGGVi4C3VM0P37wVUCFvkVAy_90u5h9nbSlYy3-Sl-HhTdfl2fzFy1AOcHKP7qg&noncestr=Wm3WZYTPz0wzccnW&timestamp=1414587457&url=http://mp.weixin.qq.com?params=value";
+
+        System.out.println(getSHA1Sinture(s));
+       // System.out.println(checkSignature(token,sign,timestamp,nonce));
     }
     /**
      * 验证签名
@@ -45,6 +49,21 @@ public class SignUtil {
         content = null;
         // 将sha1加密后的字符串可与signature对比，标识该请求来源于微信
         return tmpStr != null ? tmpStr.equals(signature.toUpperCase()) : false;
+    }
+
+
+    public static String getSHA1Sinture(String content){
+        MessageDigest md = null;
+        String tmpStr = null;
+        try {
+            md = MessageDigest.getInstance("SHA-1");
+            // 将字符串进行sha1加密
+            byte[] digest = md.digest(content.toString().getBytes());
+            tmpStr = byteToStr(digest);
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+        return tmpStr;
     }
 
     /**

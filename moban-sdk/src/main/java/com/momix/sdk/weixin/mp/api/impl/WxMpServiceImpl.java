@@ -2,6 +2,7 @@ package com.momix.sdk.weixin.mp.api.impl;
 
 import com.momix.sdk.common.exception.SdkError;
 import com.momix.sdk.common.exception.SdkException;
+import com.momix.sdk.common.utils.string.RandomUtils;
 import com.momix.sdk.common.utils.string.StringUtils;
 import com.momix.sdk.net.http.api.SdkHttp;
 import com.momix.sdk.net.http.bean.HttpRequestParams;
@@ -95,17 +96,70 @@ public class WxMpServiceImpl implements WxMpService {
 
     @Override
     public String getJsapiTicket() throws SdkException {
-        return null;
+        return getJsapiTicket(false);
     }
 
+    /**
+     * <a href="http://mp.weixin.qq.com/wiki/7/1c97470084b73f8e224fe6d9bab1625b.html#.E9.99.84.E5.BD.951-JS-SDK.E4.BD.BF.E7.94.A8.E6.9D.83.E9.99.90.E7.AD.BE.E5.90.8D.E7.AE.97.E6.B3.95">获取jsapi ticket</a>
+     * @param forceRefresh 强制刷新
+     * @return
+     * @throws SdkException
+     */
     @Override
     public String getJsapiTicket(boolean forceRefresh) throws SdkException {
-        return null;
+        try {
+            if(forceRefresh){
+                wxMpConfig.expireJsapiTicket();
+            }
+            if(wxMpConfig.isJsapiTicketExpired()){
+                synchronized (globalJsapiTicketRefreshLock){
+                    if(wxMpConfig.isJsapiTicketExpired()){
+                        final String url = WxHttpUrl.JSAPI_TICKET(getAccessToken());
+                        HttpRequestParams req = new HttpRequestParams();
+                        req.setUri(url);
+                        HttpResponseParam res = sdkHttp.get(req);
+                        SdkError error = new JsonParser().from(res.getContent(), SdkError.class);
+                        if(null!=error && error.getErrcode() !=0){
+                            throw new SdkException(error);
+                        }
+                        WxJsapiTicket jsapiTicket = new JsonParser().from(res.getContent(),WxJsapiTicket.class);
+                        wxMpConfig.updateJsapiTicket(jsapiTicket.getTicket(),jsapiTicket.getExpires_in());
+                    }
+                }
+            }
+        } catch (SdkException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return wxMpConfig.getJsapiTicket();
     }
 
     @Override
     public WxJsapiSignature createJsapiSignature(String url) throws SdkException {
-        return null;
+        long timestamp = System.currentTimeMillis() / 1000;
+        String noncestr = RandomUtils.getRandomStr();
+        String jsapiTicket = getJsapiTicket(false);
+
+        try {
+            StringBuilder sb = new StringBuilder();
+            sb.append("jsapi_ticket=").append(jsapiTicket);
+            sb.append("noncestr=").append(noncestr);
+            sb.append("timestamp=").append(timestamp);
+            sb.append("url=").append(url);
+
+            String signature = SignUtil.getSHA1Sinture(sb.toString());
+
+            WxJsapiSignature jsapiSignature = new WxJsapiSignature();
+            jsapiSignature.setAppid(wxMpConfig.getAppId());
+            jsapiSignature.setTimestamp(timestamp);
+            jsapiSignature.setNoncestr(noncestr);
+            jsapiSignature.setUrl(url);
+            jsapiSignature.setSignature(signature);
+            return jsapiSignature;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
     // endregion
 
