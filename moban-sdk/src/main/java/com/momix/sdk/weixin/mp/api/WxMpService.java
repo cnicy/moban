@@ -3,6 +3,8 @@ package com.momix.sdk.weixin.mp.api;
 import com.momix.sdk.common.exception.SdkException;
 import com.momix.sdk.weixin.mp.bean.*;
 
+import java.io.IOException;
+
 /**
  * 基础信息
  * Created by rono on 2015/11/26.
@@ -55,7 +57,7 @@ public interface WxMpService {
      * @return
      * @throws SdkException
      */
-    String getJsapiTicket(boolean forceRefresh) throws SdkException;
+    String getJsapiTicket(boolean forceRefresh) throws SdkException, IOException;
     /**
      * <pre>
      * <a href="http://mp.weixin.qq.com/wiki/7/aaa137b55fb2e0456bf8dd9148dd613f.html#.E9.99.84.E5.BD.951-JS-SDK.E4.BD.BF.E7.94.A8.E6.9D.83.E9.99.90.E7.AD.BE.E5.90.8D.E7.AE.97.E6.B3.95">创建调用jsapi时所需要的签名</a>

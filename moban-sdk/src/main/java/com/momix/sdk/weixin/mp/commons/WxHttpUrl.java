@@ -13,6 +13,8 @@ public class WxHttpUrl {
     protected static final String menu_delete  = "https://api.weixin.qq.com/cgi-bin/menu/delete?access_token=%s";
     /**http://mp.weixin.qq.com/wiki/2/07112acf4bb9a19d50c8ae08515a2a6a.html*/
     protected static final String menu_get     = "https://api.weixin.qq.com/cgi-bin/menu/get?access_token=%s";
+    /**http://mp.weixin.qq.com/wiki/7/1c97470084b73f8e224fe6d9bab1625b.html#.E9.99.84.E5.BD.951-JS-SDK.E4.BD.BF.E7.94.A8.E6.9D.83.E9.99.90.E7.AD.BE.E5.90.8D.E7.AE.97.E6.B3.95*/
+    protected static final String jsapi_ticket = "https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token=%s&type=jsapi";
     // endregion
 
     // region 账号管理
@@ -50,6 +52,10 @@ public class WxHttpUrl {
     // region 账号管理
     public static String QRCODE_CREATE(final String access_token){
         return String.format(qrcode_create,access_token);
+    }
+
+    public static String JSAPI_TICKET (final String access_token){
+        return String.format(jsapi_ticket,access_token);
     }
     // endregion
 

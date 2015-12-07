@@ -1,6 +1,7 @@
 package com.momix.sdk.weixin.mp.api.impl;
 
 import com.momix.sdk.weixin.mp.api.WxMpConfig;
+import sun.java2d.pipe.PixelToParallelogramConverter;
 
 /**
  * 默认采用默认存储方式，存储到内存，如果是分布式系统，已改自行实现
@@ -8,7 +9,9 @@ import com.momix.sdk.weixin.mp.api.WxMpConfig;
  */
 public class WxMpConfigInMemory implements WxMpConfig{
     protected  volatile long access_token_expires_time;    // access_token过期时间
+    protected  volatile long jsapiTicketExpiresTime;    // jsp_ticket 过期时间
     protected  volatile String access_token;
+    protected  volatile String jsapiTicket;
     protected  volatile String appId;
     protected  volatile String secret;
     protected  volatile String token;
@@ -35,27 +38,28 @@ public class WxMpConfigInMemory implements WxMpConfig{
     @Override
     public void updateAccessToken(String accessToken, int expiresIn) {
         this.access_token = accessToken;
-        this.access_token_expires_time = System.currentTimeMillis() + (expiresIn-200) * 1000;
+        this.access_token_expires_time = System.currentTimeMillis() + (expiresIn-200) * 1000L;
     }
 
     @Override
     public String getJsapiTicket() {
-        return null;
+        return jsapiTicket;
     }
 
     @Override
     public boolean isJsapiTicketExpired() {
-        return false;
+        return System.currentTimeMillis() > this.jsapiTicketExpiresTime;
     }
 
     @Override
     public void expireJsapiTicket() {
-
+        this.jsapiTicketExpiresTime =0;
     }
 
     @Override
     public void updateJsapiTicket(String jsapiTicket, int expiresInSeconds) {
-        access_token_expires_time = expiresInSeconds;
+        this.jsapiTicket = jsapiTicket;
+        this.jsapiTicketExpiresTime = System.currentTimeMillis() + (expiresInSeconds-200) * 1000L;
     }
 
     @Override
