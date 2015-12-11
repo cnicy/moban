@@ -69,6 +69,7 @@ function getRootPath(){
     var localhostPaht=curWwwPath.substring(0,pos);
     //获取带"/"的项目名，如：/uimcardprj
     var projectName=pathName.substring(0,pathName.substr(1).indexOf('/')+1);
+
     return(localhostPaht+projectName);
 }
 // 橘色
@@ -76,10 +77,11 @@ var  themeName = getCookie('themeName');
 if(!themeName){
     themeName = 'style_blue';
 }
+var rootPath = getRootPath();
 
-dynamicLoading.css("../css/easyui/"+themeName+"/easyui.css",'easyuiCss');
-dynamicLoading.css("../css/"+themeName+".css",'styleCss');
-dynamicLoading.css("../css/"+themeName+".css",'selectCss');
-dynamicLoading.css("../css/easyui/icon.css",'');
+dynamicLoading.css(rootPath+"/css/easyui/"+themeName+"/easyui.css",'easyuiCss');
+dynamicLoading.css(rootPath+"/css/"+themeName+".css",'styleCss');
+dynamicLoading.css(rootPath+"/css/"+themeName+".css",'selectCss');
+dynamicLoading.css(rootPath+"/css/easyui/icon.css",'');
 //dynamicLoading.js("../js/jquery.easyui.min.js",'');
-dynamicLoading.js("../js/locale/easyui-lang-zh_CN.js",'');
+dynamicLoading.js(rootPath+"/js/locale/easyui-lang-zh_CN.js",'');

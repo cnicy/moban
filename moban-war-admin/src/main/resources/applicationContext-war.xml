@@ -24,6 +24,7 @@
 	<mvc:resources mapping="/js/**" location="/js/" />
 	<mvc:resources mapping="/css/**" location="/css/" />
 	<mvc:resources mapping="/portal/**" location="/portal/" />
+	<mvc:resources mapping="/core/**" location="/core/" />
 
 	<!-- Resolves view names to protected .jsp resources within the /WEB-INF/views directory -->
 	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
@@ -56,6 +57,7 @@
 			</bean>
 		</mvc:message-converters>
 	</mvc:annotation-driven>
+
 
 	<!--<mvc:annotation-driven>-->
 		<!--<mvc:message-converters register-defaults="true">-->

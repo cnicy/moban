@@ -6,9 +6,15 @@ import com.gehua.moban.common.http.HttpRequestBean;
 import com.gehua.moban.common.http.HttpResponseBean;
 import com.gehua.moban.common.utils.CommonUtil;
 import com.gehua.moban.common.weixin.SignUtil;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.IncorrectCredentialsException;
+import org.apache.shiro.authc.LockedAccountException;
+import org.apache.shiro.authc.UnknownAccountException;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -25,7 +31,41 @@ import java.io.PrintWriter;
 public class IndexController {
     private static final Logger logger = LoggerFactory.getLogger(IndexController.class);
 
+    @RequestMapping("login")
+    public String login(HttpServletRequest req,Model model){
+        if (SecurityUtils.getSubject().isAuthenticated()) {
+            return "redirect:/portal/main.jsp";
+        }
+        final String exception = (String) req.getAttribute("shiroLoginFailure");
+        String errorMsg = "";
+        final String userName = req.getParameter("username");
+        if(CommonUtil.isNotEmpty(exception)){
+            if (UnknownAccountException.class.getName().equals(exception)
+                    || IncorrectCredentialsException.class.getName().equals(exception)) {
+                errorMsg = "用户名或者密码错误，请重新输入！";
+            }  else if(LockedAccountException.class.getName().equals(exception)){
+                errorMsg = "用户已被锁定";
+            }else{
+                errorMsg = "账户异常，请联系管理员！";
+            }
+        }
+        String kickMsg = null;
+        try{
+            kickMsg = req.getSession().getAttribute("kickOutMsg").toString();
+        }catch(Exception e){
+            // TODO
+        }
+        if(kickMsg!=null){
+            errorMsg = kickMsg;
+            req.getSession().setAttribute("kickOutMsg",null);
+        }
+        model.addAttribute("error", errorMsg);
+        model.addAttribute("userName", userName);
+        return "login";
+    }
+
     @RequestMapping("auth2")
+    @RequiresPermissions("user:create")
     public String auth2(){
         HttpRequest http = new HttpRequest();
         HttpRequestBean req = new HttpRequestBean();
@@ -42,9 +82,11 @@ public class IndexController {
         return "auth2";
     }
 
-    @RequestMapping("auth")
-    public void auth(HttpServletRequest request, HttpServletResponse response){
+    @RequestMapping("cas")
+    public void cas(HttpServletRequest request, HttpServletResponse response){
+        String ticket = request.getParameter("ticket");
 
+        System.out.println("cas"+ticket);
     }
 
     /**

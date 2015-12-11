@@ -1,20 +1,20 @@
 package com.momix.sdk.weixin.mp.api.impl;
 
 import com.momix.sdk.weixin.mp.api.WxMpConfig;
-import sun.java2d.pipe.PixelToParallelogramConverter;
 
 /**
  * 默认采用默认存储方式，存储到内存，如果是分布式系统，已改自行实现
  * Created by rono on 2015/11/27.
  */
 public class WxMpConfigInMemory implements WxMpConfig{
-    protected  volatile long access_token_expires_time;    // access_token过期时间
+    protected  volatile long accessTokenExpiresTime;    // access_token过期时间
     protected  volatile long jsapiTicketExpiresTime;    // jsp_ticket 过期时间
-    protected  volatile String access_token;
+    protected  volatile String accessToken;
     protected  volatile String jsapiTicket;
     protected  volatile String appId;
     protected  volatile String secret;
     protected  volatile String token;
+    protected  volatile String wxRedirectUrl;
 
     public WxMpConfigInMemory() {
         System.out.println("(*^__^*) ……>>>>>>>>>>>>>>>>>>>>>>>>> WxMpConfigInMemory init...............");
@@ -22,23 +22,23 @@ public class WxMpConfigInMemory implements WxMpConfig{
 
     @Override
     public String getAccessToken() {
-        return access_token;
+        return accessToken;
     }
 
     @Override
     public boolean isAccessTokenExpired() {
-        return System.currentTimeMillis() > this.access_token_expires_time;
+        return System.currentTimeMillis() > this.accessTokenExpiresTime;
     }
 
     @Override
     public void expireAccessToken() {
-        access_token_expires_time = 0;
+        accessTokenExpiresTime = 0;
     }
 
     @Override
     public void updateAccessToken(String accessToken, int expiresIn) {
-        this.access_token = accessToken;
-        this.access_token_expires_time = System.currentTimeMillis() + (expiresIn-200) * 1000L;
+        this.accessToken = accessToken;
+        this.accessTokenExpiresTime = System.currentTimeMillis() + (expiresIn-200) * 1000L;
     }
 
     @Override
@@ -82,11 +82,20 @@ public class WxMpConfigInMemory implements WxMpConfig{
         this.secret = secret;
     }
 
+    @Override
+    public String getWxRedirectUrl() {
+        return wxRedirectUrl;
+    }
+
     public String getToken() {
         return token;
     }
 
     public void setToken(String token) {
         this.token = token;
+    }
+
+    public void setWxRedirectUrl(String wxRedirectUrl) {
+        this.wxRedirectUrl = wxRedirectUrl;
     }
 }

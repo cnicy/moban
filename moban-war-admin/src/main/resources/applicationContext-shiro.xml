@@ -12,43 +12,61 @@
 	<!-- ShiroFilter是整个Shiro的入口点，用于拦截需要安全控制的请求进行处理,web.xml里边为配置入口 -->
 	<bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
 		<property name="securityManager" ref="securityManager" /> <!--安全管理器：SecurityManagerShiro的核心 -->
-		<property name="loginUrl" value="/login" />
+		<property name="loginUrl" value="https://localhost:9443/cas/login"/>
+		<property name="filters">
+			<util:map>
+				<entry key="cas" value-ref="casFilter"/>
+				<entry key="ssl" value-ref="sslFilter"/>
+			</util:map>
+		</property>
 		<property name="filterChainDefinitions"> <!--过滤器链:@see http://jinnianshilongnian.iteye.com/blog/2025656 -->
 			<value>
 				/images/**=anon
 				/css/**=anon
 				/js/**=anon
-				/pages/**=anon
+				/core/**=anon
 				/druid/**=anon
-				/uploadify/**=anon
-				/uploadServlet/**=anon
-				/picture/**=anon
-				/ueditor/**=anon
+				/portal/**=anon
 				/index/**=anon
-				/favicon.ico = anon
-				/login=authc <!-- authenticated 权限验证地址 -->
+				/favicon.ico=anon
+				/login=ssl,authc <!-- authenticated 权限验证地址 -->
 				/logout=logout
+				/cas=cas
 				/**=authc	<!-- 除上面anon之外,shiro拦截所有请求 -->
 			</value>
 		</property>
 	</bean>
 
+	<bean id="casFilter" class="org.apache.shiro.cas.CasFilter">
+		<property name="failureUrl" value="/casFailure.jsp"/>
+	</bean>
+
+	<bean id="sslFilter" class="org.apache.shiro.web.filter.authz.SslFilter">
+		<property name="port" value="8443"/>
+	</bean>
+
 	<!--安全管理器:所有与安全有关的操作都会与SecurityManager交互 -->
 	<bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
-		<property name="realm" ref="customerUserRealm" />
+		<property name="realm" ref="casRealm" />
 		<property name="sessionManager" ref="sessionManager" />
 		<property name="cacheManager" ref="cacheManager" />
 	</bean>
 
+	<bean id="casRealm" class="org.apache.shiro.cas.CasRealm">
+		<property name="defaultRoles" value="admin,user"/>
+		<property name="defaultPermissions" value="user:create,user:update"/>
+		<property name="roleAttributeNames" value="roles"/>
+		<property name="permissionAttributeNames" value="permissions"/>
+		<property name="casServerUrlPrefix" value="https://localhost:9443/cas/login"/>
+		<property name="casService" value="https://localhost:8443/cas"/>
+	</bean>
+
 	<!-- 自定义身份验证管理域 -->
-	<bean id="customerUserRealm" class="com.ielee.controller.context.CustomerUserRealm" />
+	<!--<bean id="customerUserRealm" class="com.gehua.moban.controller.context.CustomerUserRealm" />-->
 
 	<!-- **************************** session ************************ -->
 	<!-- 会话管理器 ，采用默认的Web会话管理 -->
 	<bean id="sessionManager" class="org.apache.shiro.web.session.mgt.DefaultWebSessionManager">
-		<property name="globalSessionTimeout" value="180000000" />
-		<property name="deleteInvalidSessions" value="true" />
-		<property name="sessionDAO" ref="sessionDAO" /><!-- 配置session的GRUD操作 -->
 		<property name="sessionValidationInterval" value="180000000" />
 		<property name="sessionValidationSchedulerEnabled" value="true" />
 		<property name="sessionValidationScheduler" ref="sessionValidationScheduler" />
@@ -80,7 +98,7 @@
 	<!-- **************************** cache ************************ -->
 	<!-- 缓存管理器 使用Ehcache实现 -->
 	<bean id="cacheManager" class="org.apache.shiro.cache.ehcache.EhCacheManager">
-		<property name="cacheManagerConfigFile" value="classpath:ehcache/ehcache.xml" />
+		<!--<property name="cacheManagerConfigFile" value="classpath:ehcache/ehcache.xml" />-->
 	</bean>
 		<!-- 保证实现了Shiro内部lifecycle函数的bean执行 -->
 	<bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor" />

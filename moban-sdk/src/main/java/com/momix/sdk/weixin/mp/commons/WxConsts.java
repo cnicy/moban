@@ -20,5 +20,6 @@ public class WxConsts {
   public static final String EVENTT_SUBSCRIBE = "subscribe";
   public static final String EVENTT_UNSUBSCRIBE = "unsubscribe";
   public static final String EVENTT_SCAN = "scan";
-  public static final String EVENT_VIEW = "VIEW";
+  public static final String EVENT_VIEW = "view";
+  public static final String EVENT_CLICK ="click";
 }

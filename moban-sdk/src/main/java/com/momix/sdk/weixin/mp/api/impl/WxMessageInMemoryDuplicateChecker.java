@@ -78,12 +78,9 @@ public class WxMessageInMemoryDuplicateChecker implements WxMessageDuplicateChec
     @Override
     public boolean isDuplicate(WxMpMessage wxMpMessage) {
         String messageId = "";
-        if (wxMpMessage.getMsgId() == null) {
+        if (wxMpMessage.getMsgId() == null || wxMpMessage.getMsgId().length()==0) {
             StringBuilder sb = new StringBuilder();
-            sb.append(wxMpMessage.getCreateTime()).append("-")
-                    .append(wxMpMessage.getFromUserName()).append("-")
-                    .append(wxMpMessage.getEvent()).append("-")
-                    .append(wxMpMessage.getEventKey());
+            sb.append(wxMpMessage.getFromUserName()).append("-").append(wxMpMessage.getCreateTime());
             messageId = sb.toString();
         }else{
             messageId =String.valueOf(wxMpMessage.getMsgId());

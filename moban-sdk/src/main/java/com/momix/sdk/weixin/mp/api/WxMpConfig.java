@@ -9,82 +9,88 @@ public interface WxMpConfig {
      * 获取微信accesstoken
      * @return
      */
-    public String getAccessToken();
+    String getAccessToken();
 
     /**
      * 当前token是否已经过期，根据过期时间进行对比
      * @return
      */
-    public boolean isAccessTokenExpired();
+    boolean isAccessTokenExpired();
 
     /**
      * 强制过期accesstoken，也就是将access_token_expire置0
      */
-    public void expireAccessToken();
+    void expireAccessToken();
 
     /**
      * 确保线程安全
      * @param accessToken
      * @param expiresIn
      */
-    public void updateAccessToken(String accessToken, int expiresIn);
+    void updateAccessToken(String accessToken, int expiresIn);
 
     /**+
      * 获取jsapi_ticket
      * @return
      */
-    public String getJsapiTicket();
+    String getJsapiTicket();
 
     /**
      * 判断jsapi_ticket是否过期
      * @return
      */
-    public boolean isJsapiTicketExpired();
+    boolean isJsapiTicketExpired();
 
     /**
      * 强制过期jsapi_ticket
      */
-    public void expireJsapiTicket();
+    void expireJsapiTicket();
 
     /**
      * 更新jsapi_ticket 确保线程安全
      * @param jsapiTicket
      * @param expiresInSeconds
      */
-    public void updateJsapiTicket(String jsapiTicket, int expiresInSeconds);
+    void updateJsapiTicket(String jsapiTicket, int expiresInSeconds);
 
     /**
      * appid
      * @return
      */
-    public String getAppId();
+    String getAppId();
 
     /**
      * appsccret
      * @return
      */
-    public String getSecret();
+    String getSecret();
 
     /**
      * 设置appid
      * @return
      */
-    public void setAppId(String appId);
+    void setAppId(String appId);
 
     /**
      * 获取微信公众号中设置的 token
      * @return
      */
-    public String getToken();
+    String getToken();
 
     /**
      * 设置token
      * @param token
      */
-    public void setToken(String token);
+    void setToken(String token);
     /**
      * 设置appsecret
      * @return
      */
-    public void setSecret(String secret);
+    void setSecret(String secret);
+
+    /**
+     * 微信回调地址
+     * @return
+     */
+    String getWxRedirectUrl();
 }

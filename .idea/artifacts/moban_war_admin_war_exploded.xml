@@ -58,6 +58,9 @@
           <element id="library" level="project" name="Maven: org.opensymphony.quartz:quartz:1.6.1" />
           <element id="library" level="project" name="Maven: org.apache.shiro:shiro-ehcache:1.2.3" />
           <element id="library" level="project" name="Maven: net.sf.ehcache:ehcache-core:2.5.0" />
+          <element id="library" level="project" name="Maven: org.apache.shiro:shiro-cas:1.2.3" />
+          <element id="library" level="project" name="Maven: org.jasig.cas.client:cas-client-core:3.2.1" />
+          <element id="library" level="project" name="Maven: commons-collections:commons-collections:3.2" />
         </element>
       </element>
       <element id="directory" name="META-INF">
