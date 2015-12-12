@@ -33,6 +33,19 @@
         <url-pattern>/*</url-pattern>
     </filter-mapping>
 
+    <!-- 解决idea环境下https访问 -->
+    <security-constraint>
+        <web-resource-collection>
+            <http-method>GET</http-method>
+            <http-method>POST</http-method>
+            <url-pattern>/*</url-pattern>
+        </web-resource-collection>
+
+        <user-data-constraint>
+            <transport-guarantee>CONFIDENTIAL</transport-guarantee>
+        </user-data-constraint>
+    </security-constraint>
+
     <!-- shiro 权限验证 shiroFilter 是applicationContext-shiro.xml里边配置的一个bean -->
     <filter>
         <filter-name>shiroFilter</filter-name>

@@ -12,7 +12,7 @@
 	<!-- ShiroFilter是整个Shiro的入口点，用于拦截需要安全控制的请求进行处理,web.xml里边为配置入口 -->
 	<bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
 		<property name="securityManager" ref="securityManager" /> <!--安全管理器：SecurityManagerShiro的核心 -->
-		<property name="loginUrl" value="https://localhost:9443/cas/login"/>
+		<property name="loginUrl" value="https://localhost:9443/cas?service=https://localhost:8443/cas"/>
 		<property name="filters">
 			<util:map>
 				<entry key="cas" value-ref="casFilter"/>
@@ -38,7 +38,7 @@
 	</bean>
 
 	<bean id="casFilter" class="org.apache.shiro.cas.CasFilter">
-		<property name="failureUrl" value="/casFailure.jsp"/>
+		<property name="failureUrl" value="/error.jsp"/>
 	</bean>
 
 	<bean id="sslFilter" class="org.apache.shiro.web.filter.authz.SslFilter">
@@ -57,7 +57,7 @@
 		<property name="defaultPermissions" value="user:create,user:update"/>
 		<property name="roleAttributeNames" value="roles"/>
 		<property name="permissionAttributeNames" value="permissions"/>
-		<property name="casServerUrlPrefix" value="https://localhost:9443/cas/login"/>
+		<property name="casServerUrlPrefix" value="https://localhost:9443/cas"/>
 		<property name="casService" value="https://localhost:8443/cas"/>
 	</bean>
 
