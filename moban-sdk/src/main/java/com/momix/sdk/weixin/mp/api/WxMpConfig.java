@@ -87,7 +87,6 @@ public interface WxMpConfig {
      * @return
      */
     void setSecret(String secret);
-
     /**
      * 微信回调地址
      * @return
