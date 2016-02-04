@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	   xmlns:context="http://www.springframework.org/schema/context"
-	   xmlns:tx="http://www.springframework.org/schema/tx"
-	   xmlns:mvc="http://www.springframework.org/schema/mvc"
-	   xmlns:util="http://www.springframework.org/schema/util"
-	   xsi:schemaLocation="http://www.springframework.org/schema/beans
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
        http://www.springframework.org/schema/beans/spring-beans.xsd
 	   http://www.springframework.org/schema/context
 	   http://www.springframework.org/schema/context/spring-context.xsd
@@ -16,60 +16,61 @@
 	   http://www.springframework.org/schema/tx
 	   http://www.springframework.org/schema/tx/spring-tx.xsd">
 
-	<!-- Scans the classpath of this application for @Components to deploy as beans -->
-	<context:component-scan base-package="com.gehua.moban.controller" />
+    <!-- Scans the classpath of this application for @Components to deploy as beans -->
+    <context:component-scan base-package="com.gehua.moban.controller"/>
 
-	<context:annotation-config />
-	<mvc:resources mapping="/images/**" location="/images/" />
-	<mvc:resources mapping="/js/**" location="/js/" />
-	<mvc:resources mapping="/css/**" location="/css/" />
-	<mvc:resources mapping="/portal/**" location="/portal/" />
-	<mvc:resources mapping="/core/**" location="/core/" />
+    <context:annotation-config/>
+    <mvc:resources mapping="/images/**" location="/images/"/>
+    <mvc:resources mapping="/js/**" location="/js/"/>
+    <mvc:resources mapping="/css/**" location="/css/"/>
+    <mvc:resources mapping="/portal/**" location="/portal/"/>
+    <mvc:resources mapping="/core/**" location="/core/"/>
 
-	<!-- Resolves view names to protected .jsp resources within the /WEB-INF/views directory -->
-	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
-		<property name="prefix" value="/WEB-INF/view/" />
-		<property name="suffix" value=".jsp" />
-	</bean>
+    <!-- Resolves view names to protected .jsp resources within the /WEB-INF/views directory -->
+    <bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="prefix" value="/WEB-INF/view/"/>
+        <property name="suffix" value=".jsp"/>
+    </bean>
 
-	<mvc:interceptors>
-		<bean class="com.gehua.moban.controller.context.SelfHandlerInterceptorAdapter" />
-	</mvc:interceptors>
+    <!--<mvc:interceptors>-->
+        <!--<bean class="com.gehua.moban.controller.context.SelfHandlerInterceptorAdapter"/>-->
+    <!--</mvc:interceptors>-->
 
-	<bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
-		<property name="messageConverters">
-			<list>
-				<bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter"/>
-			</list>
-		</property>
-	</bean>
+    <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
+        <property name="messageConverters">
+            <list>
+                <bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter"/>
+            </list>
+        </property>
+    </bean>
 
-	<!--spring mvc 返回乱码的问题-->
-	<mvc:annotation-driven>
-		<mvc:message-converters>
-			<bean class="org.springframework.http.converter.StringHttpMessageConverter">
-				<property name="supportedMediaTypes">
-					<list>
-						<value>text/plain;charset=UTF-8</value>
-						<value>text/html;charset=UTF-8</value>
-					</list>
-				</property>
-			</bean>
-		</mvc:message-converters>
-	</mvc:annotation-driven>
+    <!--spring mvc 返回乱码的问题-->
+    <mvc:annotation-driven>
+        <mvc:message-converters>
+            <bean class="org.springframework.http.converter.StringHttpMessageConverter">
+                <property name="supportedMediaTypes">
+                    <list>
+                        <value>text/plain;charset=UTF-8</value>
+                        <value>text/html;charset=UTF-8</value>
+                    </list>
+                </property>
+            </bean>
+        </mvc:message-converters>
+    </mvc:annotation-driven>
 
+    <!-- spring web flow  -->
+    <bean id="viewMappings" class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
+        <property name="mappings">
+            <value>/shopping=flowController</value>
+        </property>
+        <property name="defaultHandler">            <!-- UrlFilenameViewController 会将 "/index" 这样的请求映射成名为 "index" 的视图 -->
+            <bean class="org.springframework.web.servlet.mvc.UrlFilenameViewController"/>
+        </property>
+    </bean>
 
-	<!--<mvc:annotation-driven>-->
-		<!--<mvc:message-converters register-defaults="true">-->
-			<!--<bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">-->
-				<!--<property name="objectMapper">-->
-					<!--<bean class="com.fasterxml.jackson.databind.ObjectMapper">-->
-						<!--<property name="serializationInclusion">-->
-							<!--<value type="com.fasterxml.jackson.annotation.JsonInclude.Include">NON_NULL</value>-->
-						<!--</property>-->
-					<!--</bean>-->
-				<!--</property>-->
-			<!--</bean>-->
-		<!--</mvc:message-converters>-->
-	<!--</mvc:annotation-driven>-->
+    <bean id="flowController" class="org.springframework.webflow.mvc.servlet.FlowController">
+        <property name="flowExecutor" ref="flowExecutor"/>
+    </bean>
+
+    <import resource="classpath:webflow/webflow-config.xml"/>
 </beans>

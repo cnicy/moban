@@ -14,10 +14,13 @@ import com.momix.sdk.weixin.mp.api.WxMpService;
 import com.momix.sdk.weixin.mp.bean.*;
 import com.momix.sdk.weixin.mp.commons.SignUtil;
 import com.momix.sdk.weixin.mp.commons.WxHttpUrl;
+import com.momix.sdk.weixin.mp.commons.WxSignUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 微信接口业务的默认实现
@@ -143,9 +146,9 @@ public class WxMpServiceImpl implements WxMpService {
 
         try {
             StringBuilder sb = new StringBuilder();
-            sb.append("jsapi_ticket=").append(jsapiTicket);
-            sb.append("noncestr=").append(noncestr);
-            sb.append("timestamp=").append(timestamp);
+            sb.append("jsapi_ticket=").append(jsapiTicket).append("&");
+            sb.append("noncestr=").append(noncestr).append("&");
+            sb.append("timestamp=").append(timestamp).append("&");
             sb.append("url=").append(url);
 
             String signature = SignUtil.getSHA1Sinture(sb.toString());
@@ -241,7 +244,7 @@ public class WxMpServiceImpl implements WxMpService {
      * @return
      */
     @Override
-    public WxOauthAccessToken oauthAccessToken(String code) {
+    public WxOauthAccessToken oauthAccessToken(String code)throws SdkException {
         try {
             String url = WxHttpUrl.OAUTH_ACCESS_TOKEN(wxMpConfig.getAppId(),wxMpConfig.getSecret(),code);
             return get(url,WxOauthAccessToken.class,jsonParser);
@@ -254,7 +257,98 @@ public class WxMpServiceImpl implements WxMpService {
     }
     // endregion
 
+    // region 微信支付
+    @Override
+    public WxPayBrandWCPayRequest getWxPayBrandWCPayRequest(final WxMpPrePayUnifiedorderReq req)throws SdkException {
+        WxMpPrePayUnifiedorderRes res = getPrePayUnifiedorder(req);
+        final String prepay_id =res.getPrepay_id();
+        final long timestamp = System.currentTimeMillis() / 1000;
+        final String noncestr = RandomUtils.getRandomStr();
+        final String sign_type = "MD5";
 
+        Map<String, String> payInfo = new HashMap<>();
+        payInfo.put("appId", wxMpConfig.getAppId());
+        // 支付签名时间戳，注意微信jssdk中的所有使用timestamp字段均为小写。但最新版的支付后台生成签名使用的timeStamp字段名需大写其中的S字符
+        payInfo.put("timeStamp",timestamp + "");
+        payInfo.put("nonceStr", noncestr + "");
+        payInfo.put("package", "prepay_id=" + prepay_id);
+        payInfo.put("signType", sign_type);
+        String finalSign = WxSignUtils.createSign(payInfo, wxMpConfig.getMerchantKey());
+        payInfo.put("paySign", finalSign);
+
+        WxPayBrandWCPayRequest result = new WxPayBrandWCPayRequest();
+        result.setAppId(wxMpConfig.getAppId());
+        result.setNonceStr(noncestr);
+        result.setPackages(payInfo.get("package"));
+        result.setPaySign(finalSign);
+        result.setSignType(sign_type);
+        result.setTimeStamp(timestamp+"");
+
+        return result;
+    }
+
+    @Override
+    public WxMpPrePayUnifiedorderRes getPrePayUnifiedorder(final WxMpPrePayUnifiedorderReq req) throws SdkException {
+        try {
+            String url = WxHttpUrl.PAT_UNIFIEDORDER();
+            String nonce_str = System.currentTimeMillis() + "";
+
+            Map<String,String> parameters = new HashMap<>();
+            parameters.put("appid",wxMpConfig.getAppId());
+            parameters.put("mch_id",wxMpConfig.getMerchantId());
+            parameters.put("nonce_str",nonce_str);
+
+            WxMpPrePayUnifiedorderReq.toMap(req,parameters);
+            String sign = WxSignUtils.createSign(parameters,wxMpConfig.getMerchantKey());
+            parameters.put("sign", sign);
+
+            StringBuilder requestParams = new StringBuilder("<xml>");
+            for (Map.Entry<String, String> para : parameters.entrySet()) {
+                requestParams.append(String.format("<%s>%s</%s>", para.getKey(), para.getValue(), para.getKey()));
+            }
+            requestParams.append("</xml>");
+            HttpRequestParams params = new HttpRequestParams();
+            params.setUri(url);
+            params.setRequestParams(requestParams.toString());
+            // 发起http请求
+            HttpResponseParam resParams = sdkHttp.post(params);
+            WxMpPrePayUnifiedorderRes res = xmlParser.from(resParams.getContent(),WxMpPrePayUnifiedorderRes.class);
+            if(null!=res.getResult_code() && "SUCCESS".equals(res.getResult_code())){
+                return res;
+            }else
+                throw new SdkException(res.getReturn_msg());
+        } catch (SdkException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+
+    // endregion
+    @Override
+    public byte[] getTemporaryMedia(String mediaId) throws SdkException {
+        final String url = WxHttpUrl.MEDIA_GET(getAccessToken(),mediaId);
+        HttpRequestParams params = new HttpRequestParams();
+        params.setUri(url);
+        try {
+            HttpResponseParam responseParam =  sdkHttp.getByte(params);
+            if(null!=responseParam.getContents() && responseParam.getContents().length>0){
+                return responseParam.getContents();
+            } else{
+                SdkError sdkError = jsonParser.from(responseParam.getContent(), SdkError.class);
+                throw  new SdkException(sdkError);
+            }
+        } catch (IOException e) {
+            logger.error(e.getMessage(),e);
+            throw new SdkException("网络异常！");
+        }
+    }
+    // region 文件、素材
+
+
+    // endregion
 
     // region 微信网络请求
     public <T, E> T post(String url, E req, Class<T> res, Parser parser) throws SdkException, IOException {

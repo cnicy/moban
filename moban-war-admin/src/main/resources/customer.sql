@@ -351,6 +351,7 @@ CREATE TABLE uc_leave_message(
 	ulm_email								VARCHAR(50)		COMMENT 'emial',
 	ulm_phone								VARCHAR(15)		COMMENT '手机号',
 	ulm_context							TEXT					COMMENT '内容',
+	ulm_replay							TEXT					COMMENT '回复',
 	ulm_contact							VARCHAR(100)	COMMENT '联系方式',
 	ulm_isDel               TINYINT    	  COMMENT '显示标记',
 	ulm_createDate          DATETIME      COMMENT '创建时间',
@@ -360,6 +361,26 @@ CREATE TABLE uc_leave_message(
 
 	PRIMARY KEY(ulm_id)
 )ENGINE=INNODB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT'会员留言表';
+/*==============================================================*/
+/* Table: uc_cust_sms_record        用户短信记录表               */
+/*==============================================================*/
+
+DROP TABLE IF EXISTS uc_cust_sms_record;
+CREATE TABLE uc_cust_sms_record(
+	ucsr_id 								BIGINT(12) 								NOT NULL AUTO_INCREMENT 	COMMENT '主键ID',
+	ucsr_serviceId			 		INT 											COMMENT '服务商id',
+	ucsr_custId							INT												COMMENT '用户id',
+	ucsr_cellPhone 					VARCHAR (15) 							COMMENT '手机号',
+	ucsr_validateCode 			VARCHAR(10) 							COMMENT '验证码',
+	ucsr_sendTime 					DATETIME									COMMENT '发送时间',
+	ucsr_isDel              TINYINT    	  						COMMENT '显示标记',
+	ucsr_createDate         DATETIME     							COMMENT '创建时间',
+	ucsr_updateDate         DATETIME     							COMMENT '更新时间',
+	ucsr_reserved1          VARCHAR(255)  						COMMENT '保留字段1',
+	ucsr_reserved2          VARCHAR(255)  						COMMENT '保留字段2',
+
+	PRIMARY KEY(ucsr_id)
+)ENGINE=INNODB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT'用户短信记录表';
 
 
 

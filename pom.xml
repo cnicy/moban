@@ -6,7 +6,7 @@
 
     <parent>
         <groupId>com.momix</groupId>
-        <artifactId>allin</artifactId>
+        <artifactId>opensesame</artifactId>
         <version>1.0</version>
     </parent>
 
@@ -30,6 +30,7 @@
         <logback.version>1.1.3</logback.version>
         <jackson.version>2.2.2</jackson.version>
         <google.gson.version>2.2.4</google.gson.version>
+        <commons.codec>1.9</commons.codec>
         <!--db-->
         <druid.version>1.0.9</druid.version>
         <mybatis.version>3.3.0</mybatis.version>
@@ -38,7 +39,7 @@
         <mybatis-mapper.version>3.3.0</mybatis-mapper.version>
         <mysql-java-connector.version>5.1.37</mysql-java-connector.version>
         <!--spring-->
-        <spring-framework.version>3.2.15.RELEASE</spring-framework.version>
+        <spring-framework.version>4.1.9.RELEASE</spring-framework.version>
         <servlet.version>3.0.1</servlet.version>
         <jstl.version>1.2</jstl.version>
         <!-- auth -->
@@ -117,6 +118,11 @@
                 <groupId>com.google.code.gson</groupId>
                 <artifactId>gson</artifactId>
                 <version>${google.gson.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>commons-codec</groupId>
+                <artifactId>commons-codec</artifactId>
+                <version>${commons.codec}</version>
             </dependency>
             <!--jackson-->
             <dependency>

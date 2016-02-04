@@ -14,12 +14,20 @@ public interface SdkHttp {
      * @param requestParams
      * @return
      */
-    public HttpResponseParam get(HttpRequestParams requestParams) throws IOException;
+    HttpResponseParam get(HttpRequestParams requestParams) throws IOException;
 
     /**
      * POST请求
      * @param requestParams
      * @return
      */
-    public HttpResponseParam post(HttpRequestParams requestParams)throws IOException;
+    HttpResponseParam post(HttpRequestParams requestParams)throws IOException;
+
+    /**
+     * 获取byte数组，一般用于文件下载
+     * @param requestParams
+     * @return
+     * @throws IOException
+     */
+    HttpResponseParam getByte(HttpRequestParams requestParams)throws IOException;
 }

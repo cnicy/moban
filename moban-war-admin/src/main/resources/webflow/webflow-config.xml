@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:webflow="http://www.springframework.org/schema/webflow-config"
+       xsi:schemaLocation=" http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans-4.1.xsd
+       http://www.springframework.org/schema/webflow-config
+       http://www.springframework.org/schema/webflow-config/spring-webflow-config-2.0.xsd">
+
+    <webflow:flow-executor id="flowExecutor"/>
+    <!-- 所有 flow的定义文件它的位置在这里进行配置， flow-builder-services 用于配置 flow 的特性 -->
+    <webflow:flow-registry id="flowRegistry" flow-builder-services="flowBuilderServices">
+        <webflow:flow-location path="/WEB-INF/flows/shopping.xml" id="shopping"/>
+        <webflow:flow-location path="/WEB-INF/flows/addToCart.xml" id="addoCart"/>
+    </webflow:flow-registry>
+
+    <!--Web Flow 中的视图通过 MVC 框架的视图技术来呈现 -->
+    <webflow:flow-builder-services id="flowBuilderServices" view-factory-creator="mvcViewFactoryCreator"/>
+    <!-- 指明 MVC 框架的 view resolver ，用于通过 view 名查找资源 -->
+    <bean id="mvcViewFactoryCreator" class="org.springframework.webflow.mvc.builder.MvcViewFactoryCreator">
+        <property name="viewResolvers" ref="viewResolver"/>
+    </bean>
+</beans>

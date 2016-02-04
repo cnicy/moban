@@ -93,4 +93,20 @@ public interface WxMpConfig {
      * @return
      */
     String getWxRedirectUrl();
+
+    /**
+     * @return 商户id
+     */
+    String getMerchantId();
+
+    /**
+     * @return 商户key
+     */
+    String getMerchantKey();
+
+    /**
+     * 获取服务端ip
+     * @return
+     */
+    String getServerIp();
 }

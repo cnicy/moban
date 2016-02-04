@@ -181,7 +181,7 @@ CREATE TABLE sys_user_operate_log(
 	suol_title     	  VARCHAR(50) 		  COMMENT'日志标题',
 	suol_module				TINYINT			  		COMMENT'所属模块0系统管理1用户模块2CMS模块3微信模块4商城模块5支付模块6统计模块7监控',
 	suol_subModule		VARCHAR(50)				COMMENT'子模块名称',
-	suol_package			VARCHAR(100)			COMMENT'包名',
+	suol_packages			VARCHAR(100)			COMMENT'包名',
 	suol_desc      	  VARCHAR(100)  		COMMENT'描述',
 	suol_type      	  TINYINT  		      COMMENT'操作类型:0添加1修改2删除3',
 	suol_ipAddress  	VARCHAR(50)   		COMMENT'ip地址',

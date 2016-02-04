@@ -15,7 +15,6 @@ public class HttpTest {
         SdkHttp http = new SdkHttpURLConnection();
         HttpRequestParams req = new HttpRequestParams();
         req.setUri("http://sms.api.ums86.com:8899/sms/Api/Send.do");
-
         try {
             HttpResponseParam res =  http.post(req);
             System.out.println(res.getStatusCode());

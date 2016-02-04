@@ -115,6 +115,41 @@ public interface WxMpService {
      * @param code
      * @return
      */
-    WxOauthAccessToken oauthAccessToken(final String code);
+    WxOauthAccessToken oauthAccessToken(final String code)throws SdkException;
+    // endregion
+
+    // region 支付
+    /**
+     * <pre>
+     *    <a href="https://pay.weixin.qq.com/wiki/doc/api/jsapi.php?chapter=7_7&index=6">网页端调起支付API</a>
+     * </pre>
+     * @param req
+     * @return
+     * @throws SdkException
+     */
+    WxPayBrandWCPayRequest getWxPayBrandWCPayRequest(final WxMpPrePayUnifiedorderReq req)throws SdkException;
+
+    /**
+     * <pre>
+     *     appid和商户号不用传入，自动获取
+     *     <a href="https://pay.weixin.qq.com/wiki/doc/api/jsapi.php?chapter=9_1">统一下单</a>
+     * </pre>
+     * @return
+     * @throws SdkException
+     */
+    WxMpPrePayUnifiedorderRes getPrePayUnifiedorder(final WxMpPrePayUnifiedorderReq wxMpPrePayUnifiedorderReq)throws SdkException;
+    // endregion
+
+    // region 文件、素材
+
+    /**
+     * <pre>
+     *     <a href="http://mp.weixin.qq.com/wiki/15/2d353966323806a202cd2deaafe8e557.html">获取临时素材</a>
+     * </pre>
+     * @param mediaId
+     * @return
+     * @throws SdkException
+     */
+    byte[] getTemporaryMedia(final String mediaId)throws SdkException;
     // endregion
 }

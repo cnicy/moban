@@ -29,6 +29,16 @@ public class WxHttpUrl {
     protected  static final String message_template = "https://api.weixin.qq.com/cgi-bin/message/template/send?access_token=%s";
     // endregion
 
+    // region 支付
+    protected static final String pay_unifiedorder = "https://api.mch.weixin.qq.com/pay/unifiedorder";
+    // endregion
+
+    // region 文件、素材
+    protected static final String get_media = "https://api.weixin.qq.com/cgi-bin/media/get?access_token=%s&media_id=%s";
+    // endregion
+
+
+
     /** 获取access_token url*/
     public static String ACCESS_TOKEN(final String appId,final String appSecret){
         return String.format(access_token,appId,appSecret);
@@ -68,6 +78,20 @@ public class WxHttpUrl {
     // region 消息
     public static String MESSAGE_TEMPLATE(final String access_token){
         return String.format(message_template,access_token);
+    }
+    // endregion
+
+    // regsion 支付
+
+    /** 统一下单*/
+    public static String PAT_UNIFIEDORDER(){
+        return pay_unifiedorder;
+    }
+    // endregion
+
+    // region 素材、文件
+    public static String MEDIA_GET(final String token,final String medisId){
+        return String.format(get_media,token,medisId);
     }
     // endregion
 }

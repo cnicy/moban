@@ -15,6 +15,9 @@ public class WxMpConfigInMemory implements WxMpConfig{
     protected  volatile String secret;
     protected  volatile String token;
     protected  volatile String wxRedirectUrl;
+    protected  volatile String merchantId; // 商户id
+    protected  volatile String merchantKey; // 商户key
+    protected  volatile String serverIp;
 
     public WxMpConfigInMemory() {
         System.out.println("(*^__^*) ……>>>>>>>>>>>>>>>>>>>>>>>>> WxMpConfigInMemory init...............");
@@ -87,6 +90,29 @@ public class WxMpConfigInMemory implements WxMpConfig{
         return wxRedirectUrl;
     }
 
+    @Override
+    public String getMerchantId() {
+        return merchantId;
+    }
+
+    @Override
+    public String getMerchantKey() {
+        return merchantKey;
+    }
+
+    @Override
+    public String getServerIp() {
+        return this.serverIp;
+    }
+
+    public void setMerchantId(String merchantId) {
+        this.merchantId = merchantId;
+    }
+
+    public void setMerchantKey(String merchantKey) {
+        this.merchantKey = merchantKey;
+    }
+
     public String getToken() {
         return token;
     }
@@ -97,5 +123,9 @@ public class WxMpConfigInMemory implements WxMpConfig{
 
     public void setWxRedirectUrl(String wxRedirectUrl) {
         this.wxRedirectUrl = wxRedirectUrl;
+    }
+
+    public void setServerIp(String serverIp) {
+        this.serverIp = serverIp;
     }
 }
