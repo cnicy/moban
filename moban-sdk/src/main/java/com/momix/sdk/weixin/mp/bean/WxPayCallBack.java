@@ -1,5 +1,7 @@
 package com.momix.sdk.weixin.mp.bean;
 
+import com.momix.sdk.parser.api.XmlAttribute;
+
 import java.io.Serializable;
 
 /**
@@ -8,6 +10,7 @@ import java.io.Serializable;
 public class WxPayCallBack implements Serializable{
     private String return_code; // 返回状态码
     private String return_msg; // 返回信息
+    @XmlAttribute(name="appid")
     private String appid; // 公众账号ID
     private String mch_id;// 商户号
     private String device_info; // 设备号
@@ -20,12 +23,12 @@ public class WxPayCallBack implements Serializable{
     private String is_subscribe; // 是否关注公众账号
     private String trade_type; // 交易类型
     private String bank_type; // 付款银行
-    private Integer total_fee; // 总金额
+    private String total_fee; // 总金额
     private String fee_type; // 货币种类
-    private Integer cash_fee; // 现金支付金额
+    private String cash_fee; // 现金支付金额
     private String cash_fee_type; // 现金支付货币类型
-    private Integer coupon_fee; // 代金券或立减优惠金额
-    private Integer coupon_count; // 代金券或立减优惠使用数量
+    private String coupon_fee; // 代金券或立减优惠金额
+    private String coupon_count; // 代金券或立减优惠使用数量
     private String transaction_id; // 微信支付订单号
     private String out_trade_no; // 微信支付订单号
     private String attach; // 商家数据包
@@ -143,11 +146,11 @@ public class WxPayCallBack implements Serializable{
         this.bank_type = bank_type;
     }
 
-    public Integer getTotal_fee() {
+    public String getTotal_fee() {
         return total_fee;
     }
 
-    public void setTotal_fee(Integer total_fee) {
+    public void setTotal_fee(String total_fee) {
         this.total_fee = total_fee;
     }
 
@@ -159,11 +162,11 @@ public class WxPayCallBack implements Serializable{
         this.fee_type = fee_type;
     }
 
-    public Integer getCash_fee() {
+    public String getCash_fee() {
         return cash_fee;
     }
 
-    public void setCash_fee(Integer cash_fee) {
+    public void setCash_fee(String cash_fee) {
         this.cash_fee = cash_fee;
     }
 
@@ -175,19 +178,19 @@ public class WxPayCallBack implements Serializable{
         this.cash_fee_type = cash_fee_type;
     }
 
-    public Integer getCoupon_fee() {
+    public String getCoupon_fee() {
         return coupon_fee;
     }
 
-    public void setCoupon_fee(Integer coupon_fee) {
+    public void setCoupon_fee(String coupon_fee) {
         this.coupon_fee = coupon_fee;
     }
 
-    public Integer getCoupon_count() {
+    public String getCoupon_count() {
         return coupon_count;
     }
 
-    public void setCoupon_count(Integer coupon_count) {
+    public void setCoupon_count(String coupon_count) {
         this.coupon_count = coupon_count;
     }
 
