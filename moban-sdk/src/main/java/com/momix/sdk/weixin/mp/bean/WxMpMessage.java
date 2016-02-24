@@ -33,6 +33,15 @@ public class WxMpMessage implements Serializable{
     // 事件key
     @XmlAttribute(name="EventKey")
     private String eventKey;
+    // 坐标
+    @XmlAttribute(name="Latitude")
+    private String latitude;
+    // 坐标
+    @XmlAttribute(name="Longitude")
+    private String longitude;
+    // 精度
+    @XmlAttribute(name="Precision")
+    private String precision;
 
     public String getToUserName() {
         return toUserName;
@@ -81,5 +90,29 @@ public class WxMpMessage implements Serializable{
     }
     public void setEventKey(String eventKey) {
         this.eventKey = eventKey;
+    }
+
+    public String getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(String latitude) {
+        this.latitude = latitude;
+    }
+
+    public String getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(String longitude) {
+        this.longitude = longitude;
+    }
+
+    public String getPrecision() {
+        return precision;
+    }
+
+    public void setPrecision(String precision) {
+        this.precision = precision;
     }
 }
