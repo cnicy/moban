@@ -22,4 +22,5 @@ public class WxConsts {
   public static final String EVENTT_SCAN = "scan";
   public static final String EVENT_VIEW = "view";
   public static final String EVENT_CLICK ="click";
+  public static final String EVENT_LOCATION ="LOCATION";
 }
